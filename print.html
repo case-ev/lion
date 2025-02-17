@@ -1,0 +1,1209 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>lion</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">lion</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="what-is-lion"><a class="header" href="#what-is-lion">What is lion?</a></h1>
+<p>lion is a library whose goal is to provide a simulator of the operation of a lithium-ion battery, considering both electrical and thermal behavior, as well as the relations between both of them. It does this by considering a series of models that dictate how electrical operation affects heat generation, and how the cell's temperatures affect electrical performance.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="installation"><a class="header" href="#installation">Installation</a></h1>
+<p>Here, the installation instructions are detailed for all supported platforms, namely</p>
+<ul>
+<li><a href="instructions/installation/linux.html">Linux</a></li>
+<li><a href="instructions/installation/macos.html">macOS</a></li>
+<li><a href="instructions/installation/windows.html">Windows</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="installation--linux"><a class="header" href="#installation--linux">Installation &gt; Linux</a></h1>
+<h2 id="c-library"><a class="header" href="#c-library">C library</a></h2>
+<p>For building in Linux, the GSL library must be installed according to your distribution: for some common distributions, the corresponding instruction would be</p>
+<pre><code class="language-bash">sudo apt install libgsl-dev  # Ubuntu
+sudo dnf install gsl         # Fedora
+sudo pacman -S gsl           # Arch
+</code></pre>
+<p>lion uses <a href="https://cmake.org/">CMake</a> as the build system, so you also need to have it installed. Then, simply run</p>
+<pre><code class="language-bash">make
+sudo make install
+</code></pre>
+<p>to build and install the library, respectively. After this, the library files can be found in <code>/usr/lib</code>, and the headers in <code>/usr/include/lion/</code>.</p>
+<h2 id="python-bindings"><a class="header" href="#python-bindings">Python bindings</a></h2>
+<p>Additionally, once the C library is installed the Python bindings can be installed by calling</p>
+<pre><code class="language-bash">pip install -r requirements.txt
+pip install .
+</code></pre>
+<p>after which the packages <code>lion</code> and <code>lion_utils</code> are installed.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="installation--macos"><a class="header" href="#installation--macos">Installation &gt; macOS</a></h1>
+<p>Installation for both the C library and the Python bindings on macOS is equivalent to Linux. The recommended method to install GSL is using <a href="https://brew.sh/">homebrew</a>, by calling <code>brew install gsl</code>, but any other method should work as long as CMake is able to automatically find GSL.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="installation--windows"><a class="header" href="#installation--windows">Installation &gt; Windows</a></h1>
+<p>The recommended method of using lion in Windows is through <a href="https://learn.microsoft.com/en-us/windows/wsl/">WSL</a>, for which the <a href="instructions/installation/linux.html">Linux</a> instructions should be followed, but native compilation is possible.</p>
+<h2 id="c-library-1"><a class="header" href="#c-library-1">C library</a></h2>
+<p>Installation on Windows is only currently supported using <a href="https://learn.microsoft.com/en-us/vcpkg/">vcpkg</a> to handle package installation and configuration of the toolchain. Having both vcpkg and CMake installed, the <code>VCPKG_ROOT</code> environment variable must be pointing towards the directory in which vcpkg was installed: then, simply run</p>
+<pre><code class="language-bat">./make.bat
+./make.bat install
+</code></pre>
+<p>which will configure and install the library, requesting administrator privileges for installation.</p>
+<h2 id="python-bindings-1"><a class="header" href="#python-bindings-1">Python bindings</a></h2>
+<p>In order to install the Python bindings, it is <em>not</em> necessary to have the C library installed, as installing the Python library will build the binaries and ship them within the source files: thus, if you only intend to use lion as a Python library, it is recommended to only install the bindings. Having CMake and vcpkg installed with the <code>VCPKG_ROOT</code> environment variable properly configured, simply run</p>
+<pre><code class="language-bat">pip install -r requirements.txt
+pip install .
+</code></pre>
+<p>which will compile the C library and leave the binaries within the Python FFI, as well as install the Python bindings. Currently, the Python FFI only works with the binaries included within the package itself.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="documentation"><a class="header" href="#documentation">Documentation</a></h1>
+<h2 id="html-documentation"><a class="header" href="#html-documentation">HTML documentation</a></h2>
+<p>Currently, building the documentation is only supported on Linux.</p>
+<p>Building the documentation requires <a href="https://doxygen.nl/index.html">Doxygen</a> to compile the API reference into XML and man files, <a href="https://github.com/sourcey/moxygen">moxygen</a> to transpile the XML files into Markdown files, and <a href="https://github.com/rust-lang/mdbook">mdBook</a> to compile the Markdown documentation (which includes the API reference and more) into HTML files. With these three tools installed, run</p>
+<pre><code class="language-bash">make docs
+</code></pre>
+<p>to compile the docs, or</p>
+<pre><code class="language-bash">make docs-serve
+</code></pre>
+<p>to compile and open the docs in your browser.</p>
+<h2 id="man-pages"><a class="header" href="#man-pages">man pages</a></h2>
+<p>Doxygen can be used alongside <a href="https://github.com/gsauthof/doxy2man">doxy2man</a> to compile the API reference into man pages. To do this, simply run</p>
+<pre><code class="language-bash">make man
+sudo make man-install
+</code></pre>
+<p>This will compile the documentation and install the man pages to the <code>/usr/share/man/man3/</code> directory.</p>
+<div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><p>This section contains the reference for the C api.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="group__types"><a class="header" href="#group__types">group <code>types</code></a></h1>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Members</th><th>Descriptions</th></tr></thead><tbody>
+<tr><td><code>enum </code><a href="reference/api_reference_types.html#group__types_ga3e9999301ecfcc086f8b15b6f2d6df7a_1ga3e9999301ecfcc086f8b15b6f2d6df7a"><code>lion_rint_model</code></a></td><td>Internal resistance models.</td></tr>
+<tr><td><code>enum </code><a href="reference/api_reference_types.html#group__types_gad83f8816543d2598fdb8ed267c86c468_1gad83f8816543d2598fdb8ed267c86c468"><code>lion_regime</code></a></td><td>Regime in which the simulation operates.</td></tr>
+<tr><td><code>enum </code><a href="reference/api_reference_types.html#group__types_ga48f6998f6efaf17be7249c767ea99831_1ga48f6998f6efaf17be7249c767ea99831"><code>lion_stepper</code></a></td><td>Stepper algorithm for the ode solver.</td></tr>
+<tr><td><code>enum </code><a href="reference/api_reference_types.html#group__types_ga1895ab675d054599fb94ce3ba709d877_1ga1895ab675d054599fb94ce3ba709d877"><code>lion_minimizer</code></a></td><td>Minimizer algorithm for the optimization problem.</td></tr>
+<tr><td><code>enum </code><a href="reference/api_reference_types.html#group__types_gacd0d583ea0ca0162ff8f8ce6fff2b886_1gacd0d583ea0ca0162ff8f8ce6fff2b886"><code>lion_jacobian_method</code></a></td><td>Jacobian calculation method.</td></tr>
+<tr><td><code>enum </code><a href="reference/api_reference_types.html#group__types_ga2707799ded0b59ff7facdbed3de6698d_1ga2707799ded0b59ff7facdbed3de6698d"><code>lion_status</code></a></td><td>Status of each <code>lion</code> call.</td></tr>
+<tr><td><code>struct </code><a href="reference/api_reference_types.html#structlion__params__init"><code>lion_params_init</code></a></td><td>Initialization parameters.</td></tr>
+<tr><td><code>struct </code><a href="reference/api_reference_types.html#structlion__params__ehc"><code>lion_params_ehc</code></a></td><td>Entropic heat coefficient model parameters.</td></tr>
+<tr><td><code>struct </code><a href="reference/api_reference_types.html#structlion__params__vft"><code>lion_params_vft</code></a></td><td>Vogel-Fulcher-Tammann model for temperature-dependence of capacity.</td></tr>
+<tr><td><code>struct </code><a href="reference/api_reference_types.html#structlion__params__temp"><code>lion_params_temp</code></a></td><td>Temperature model parameters.</td></tr>
+<tr><td><code>struct </code><a href="reference/api_reference_types.html#structlion__params__ocv"><code>lion_params_ocv</code></a></td><td>Open-circuit voltage model parameters.</td></tr>
+<tr><td><code>struct </code><a href="reference/api_reference_types.html#structlion__params__rint__fixed"><code>lion_params_rint_fixed</code></a></td><td>Fixed internal resistance model.</td></tr>
+<tr><td><code>struct </code><a href="reference/api_reference_types.html#structlion__params__rint__polarization"><code>lion_params_rint_polarization</code></a></td><td>Current and state of charge dependent internal resistance model.</td></tr>
+<tr><td><code>struct </code><a href="reference/api_reference_types.html#structlion__params__rint"><code>lion_params_rint</code></a></td><td>Container for the internal resistance model.</td></tr>
+<tr><td><code>struct </code><a href="reference/api_reference_types.html#structlion__params__soh"><code>lion_params_soh</code></a></td><td>Parameters for the degradation model.</td></tr>
+<tr><td><code>struct </code><a href="reference/api_reference_types.html#structlion__params"><code>lion_params</code></a></td><td>Parameters of the system.</td></tr>
+<tr><td><code>struct </code><a href="reference/api_reference_types.html#structlion__sim__config"><code>lion_sim_config</code></a></td><td>Simulation metaparameters and hyperparameters.</td></tr>
+<tr><td><code>struct </code><a href="reference/api_reference_types.html#structlion__sim__state"><code>lion_sim_state</code></a></td><td>Simulation state variables.</td></tr>
+<tr><td><code>struct </code><a href="reference/api_reference_types.html#structlion__slv__inputs"><code>lion_slv_inputs</code></a></td><td>Inputs for the solver.</td></tr>
+<tr><td><code>struct </code><a href="reference/api_reference_types.html#structlion__sim"><code>lion_sim</code></a></td><td>Simulation runtime, used for setup and simulation.</td></tr>
+<tr><td><code>struct </code><a href="reference/api_reference_types.html#structlion__version"><code>lion_version</code></a></td><td>Version of the simulator.</td></tr>
+<tr><td><code>struct </code><a href="reference/api_reference_types.html#structlion__vector"><code>lion_vector</code></a></td><td>Variable length vector of data.</td></tr>
+</tbody></table>
+</div>
+<h2 id="members"><a class="header" href="#members">Members</a></h2>
+<h4 id="group__types_ga3e9999301ecfcc086f8b15b6f2d6df7a_1ga3e9999301ecfcc086f8b15b6f2d6df7a"><a class="header" href="#group__types_ga3e9999301ecfcc086f8b15b6f2d6df7a_1ga3e9999301ecfcc086f8b15b6f2d6df7a"><code>enum </code><a href="reference/api_reference_types.html#group__types_ga3e9999301ecfcc086f8b15b6f2d6df7a_1ga3e9999301ecfcc086f8b15b6f2d6df7a"><code>lion_rint_model</code></a></a></h4>
+<div class="table-wrapper"><table><thead><tr><th>Values</th><th>Descriptions</th></tr></thead><tbody>
+<tr><td>LION_RINT_MODEL_FIXED</td><td>Fixed internal resistance model.</td></tr>
+<tr><td>LION_RINT_MODEL_POLARIZATION</td><td>Current and state of charge dependent internal resistance model.</td></tr>
+</tbody></table>
+</div>
+<p>Internal resistance models.</p>
+<h4 id="group__types_gad83f8816543d2598fdb8ed267c86c468_1gad83f8816543d2598fdb8ed267c86c468"><a class="header" href="#group__types_gad83f8816543d2598fdb8ed267c86c468_1gad83f8816543d2598fdb8ed267c86c468"><code>enum </code><a href="reference/api_reference_types.html#group__types_gad83f8816543d2598fdb8ed267c86c468_1gad83f8816543d2598fdb8ed267c86c468"><code>lion_regime</code></a></a></h4>
+<div class="table-wrapper"><table><thead><tr><th>Values</th><th>Descriptions</th></tr></thead><tbody>
+<tr><td>LION_ONLYSF</td><td>Surface temperature.</td></tr>
+<tr><td>LION_ONLYAIR</td><td>Air temperature.</td></tr>
+<tr><td>LION_BOTH</td><td>Surface and air temperature.</td></tr>
+</tbody></table>
+</div>
+<p>Regime in which the simulation operates.</p>
+<p>This enum indicates which domains the temperature model considers. Currently only surface simulation is allowed, but air considerations are planned.</p>
+<h4 id="group__types_ga48f6998f6efaf17be7249c767ea99831_1ga48f6998f6efaf17be7249c767ea99831"><a class="header" href="#group__types_ga48f6998f6efaf17be7249c767ea99831_1ga48f6998f6efaf17be7249c767ea99831"><code>enum </code><a href="reference/api_reference_types.html#group__types_ga48f6998f6efaf17be7249c767ea99831_1ga48f6998f6efaf17be7249c767ea99831"><code>lion_stepper</code></a></a></h4>
+<div class="table-wrapper"><table><thead><tr><th>Values</th><th>Descriptions</th></tr></thead><tbody>
+<tr><td>LION_STEPPER_RK2</td><td>Explicit Runge-Kutta (2, 3).</td></tr>
+<tr><td>LION_STEPPER_RK4</td><td>Explicit Runge-Kutta 4.</td></tr>
+<tr><td>LION_STEPPER_RKF45</td><td>Explicit Runge-Kutta-Fehlberg (4, 5).</td></tr>
+<tr><td>LION_STEPPER_RKCK</td><td>Explicit Runge-Kutta Cash-Karp (4, 5).</td></tr>
+<tr><td>LION_STEPPER_RK8PD</td><td>Explicit Runge-Kutta Prince-Dormand (8, 9).</td></tr>
+<tr><td>LION_STEPPER_RK1IMP</td><td>Implicit Euler.</td></tr>
+<tr><td>LION_STEPPER_RK2IMP</td><td>Implicit Runge-Kutta 2.</td></tr>
+<tr><td>LION_STEPPER_RK4IMP</td><td>Implicit Runge-Kutta 4.</td></tr>
+<tr><td>LION_STEPPER_BSIMP</td><td>Implicit Bulirsch-Stoer.</td></tr>
+<tr><td>LION_STEPPER_MSADAMS</td><td>Multistep Adams.</td></tr>
+<tr><td>LION_STEPPER_MSBDF</td><td>Multistep backwards differentiation.</td></tr>
+</tbody></table>
+</div>
+<p>Stepper algorithm for the ode solver.</p>
+<p>The types of steppers allowed are those allowed by GSL, and considers both explicit and implicit solvers.</p>
+<h4 id="group__types_ga1895ab675d054599fb94ce3ba709d877_1ga1895ab675d054599fb94ce3ba709d877"><a class="header" href="#group__types_ga1895ab675d054599fb94ce3ba709d877_1ga1895ab675d054599fb94ce3ba709d877"><code>enum </code><a href="reference/api_reference_types.html#group__types_ga1895ab675d054599fb94ce3ba709d877_1ga1895ab675d054599fb94ce3ba709d877"><code>lion_minimizer</code></a></a></h4>
+<div class="table-wrapper"><table><thead><tr><th>Values</th><th>Descriptions</th></tr></thead><tbody>
+<tr><td>LION_MINIMIZER_GOLDENSECTION</td><td>Golden section.</td></tr>
+<tr><td>LION_MINIMIZER_BRENT</td><td>Brent.</td></tr>
+<tr><td>LION_MINIMIZER_QUADGOLDEN</td><td>Brent with safeguarded step-length.</td></tr>
+</tbody></table>
+</div>
+<p>Minimizer algorithm for the optimization problem.</p>
+<p>The types of minimizers allowed are those allowed by GSL.</p>
+<h4 id="group__types_gacd0d583ea0ca0162ff8f8ce6fff2b886_1gacd0d583ea0ca0162ff8f8ce6fff2b886"><a class="header" href="#group__types_gacd0d583ea0ca0162ff8f8ce6fff2b886_1gacd0d583ea0ca0162ff8f8ce6fff2b886"><code>enum </code><a href="reference/api_reference_types.html#group__types_gacd0d583ea0ca0162ff8f8ce6fff2b886_1gacd0d583ea0ca0162ff8f8ce6fff2b886"><code>lion_jacobian_method</code></a></a></h4>
+<div class="table-wrapper"><table><thead><tr><th>Values</th><th>Descriptions</th></tr></thead><tbody>
+<tr><td>LION_JACOBIAN_ANALYTICAL</td><td>Analytical method.</td></tr>
+<tr><td>LION_JACOBIAN_2POINT</td><td>Central differences method.</td></tr>
+</tbody></table>
+</div>
+<p>Jacobian calculation method.</p>
+<p>The following methods for jacobian calculation are currently supported:</p>
+<ul>
+<li>
+<p>LION_JACOBIAN_ANALYTICAL : uses the analytical equations to calculate the jacobian.</p>
+</li>
+<li>
+<p>LION_JACOBIAN_2POINT : uses central differences to numerically calculate the jacobian.</p>
+</li>
+</ul>
+<h4 id="group__types_ga2707799ded0b59ff7facdbed3de6698d_1ga2707799ded0b59ff7facdbed3de6698d"><a class="header" href="#group__types_ga2707799ded0b59ff7facdbed3de6698d_1ga2707799ded0b59ff7facdbed3de6698d"><code>enum </code><a href="reference/api_reference_types.html#group__types_ga2707799ded0b59ff7facdbed3de6698d_1ga2707799ded0b59ff7facdbed3de6698d"><code>lion_status</code></a></a></h4>
+<div class="table-wrapper"><table><thead><tr><th>Values</th><th>Descriptions</th></tr></thead><tbody>
+<tr><td>LION_STATUS_SUCCESS</td><td>Success.</td></tr>
+<tr><td>LION_STATUS_FAILURE</td><td>Failure.</td></tr>
+<tr><td>LION_STATUS_EXIT</td><td>Trigger exit.</td></tr>
+</tbody></table>
+</div>
+<p>Status of each <code>lion</code> call.</p>
+<h1 id="structlion__params__init"><a class="header" href="#structlion__params__init">struct <code>lion_params_init</code></a></h1>
+<p>Initialization parameters.</p>
+<h2 id="summary-1"><a class="header" href="#summary-1">Summary</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Members</th><th>Descriptions</th></tr></thead><tbody>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__init_1a320d41591fd46a0520c7c0f969ebf72b"><code>soc</code></a></td><td>Initial state of charge.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__init_1af83025a7915f18bb51d067438a404e50"><code>temp_in</code></a></td><td>Initial internal temperature.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__init_1a325aa048971cec22b85b2e01029f9920"><code>soh</code></a></td><td>Initial state of health.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__init_1a5fafda0f7159a2732c446e065ac96838"><code>capacity</code></a></td><td>Initial nominal capacity.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__init_1ae9633dde37115667b767ed2aca58d21c"><code>current_guess</code></a></td><td>Initial guess for the current, default is 0.</td></tr>
+</tbody></table>
+</div>
+<h2 id="members-1"><a class="header" href="#members-1">Members</a></h2>
+<h4 id="structlion__params__init_1a320d41591fd46a0520c7c0f969ebf72b"><a class="header" href="#structlion__params__init_1a320d41591fd46a0520c7c0f969ebf72b"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__init_1a320d41591fd46a0520c7c0f969ebf72b"><code>soc</code></a></a></h4>
+<p>Initial state of charge.</p>
+<h4 id="structlion__params__init_1af83025a7915f18bb51d067438a404e50"><a class="header" href="#structlion__params__init_1af83025a7915f18bb51d067438a404e50"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__init_1af83025a7915f18bb51d067438a404e50"><code>temp_in</code></a></a></h4>
+<p>Initial internal temperature.</p>
+<h4 id="structlion__params__init_1a325aa048971cec22b85b2e01029f9920"><a class="header" href="#structlion__params__init_1a325aa048971cec22b85b2e01029f9920"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__init_1a325aa048971cec22b85b2e01029f9920"><code>soh</code></a></a></h4>
+<p>Initial state of health.</p>
+<h4 id="structlion__params__init_1a5fafda0f7159a2732c446e065ac96838"><a class="header" href="#structlion__params__init_1a5fafda0f7159a2732c446e065ac96838"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__init_1a5fafda0f7159a2732c446e065ac96838"><code>capacity</code></a></a></h4>
+<p>Initial nominal capacity.</p>
+<h4 id="structlion__params__init_1ae9633dde37115667b767ed2aca58d21c"><a class="header" href="#structlion__params__init_1ae9633dde37115667b767ed2aca58d21c"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__init_1ae9633dde37115667b767ed2aca58d21c"><code>current_guess</code></a></a></h4>
+<p>Initial guess for the current, default is 0.</p>
+<h1 id="structlion__params__ehc"><a class="header" href="#structlion__params__ehc">struct <code>lion_params_ehc</code></a></h1>
+<p>Entropic heat coefficient model parameters.</p>
+<h2 id="summary-2"><a class="header" href="#summary-2">Summary</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Members</th><th>Descriptions</th></tr></thead><tbody>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__ehc_1ae82b80ccd6096d5853c0fa02dd20a54d"><code>a</code></a></td><td></td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__ehc_1a1f974323b886c9427a3362ef348cbb92"><code>b</code></a></td><td></td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__ehc_1a5b35bd9fe731e8aa5fd4d8a9ab1c84fc"><code>mu</code></a></td><td></td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__ehc_1a9524673b04570d5dba9d0db1935883f9"><code>kappa</code></a></td><td></td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__ehc_1a8e0d3c318567a1706139e136f7a1d58e"><code>sigma</code></a></td><td></td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__ehc_1a5c86292fc692cec29282313a85979bfa"><code>l</code></a></td><td></td></tr>
+</tbody></table>
+</div>
+<h2 id="members-2"><a class="header" href="#members-2">Members</a></h2>
+<h4 id="structlion__params__ehc_1ae82b80ccd6096d5853c0fa02dd20a54d"><a class="header" href="#structlion__params__ehc_1ae82b80ccd6096d5853c0fa02dd20a54d"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__ehc_1ae82b80ccd6096d5853c0fa02dd20a54d"><code>a</code></a></a></h4>
+<h4 id="structlion__params__ehc_1a1f974323b886c9427a3362ef348cbb92"><a class="header" href="#structlion__params__ehc_1a1f974323b886c9427a3362ef348cbb92"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__ehc_1a1f974323b886c9427a3362ef348cbb92"><code>b</code></a></a></h4>
+<h4 id="structlion__params__ehc_1a5b35bd9fe731e8aa5fd4d8a9ab1c84fc"><a class="header" href="#structlion__params__ehc_1a5b35bd9fe731e8aa5fd4d8a9ab1c84fc"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__ehc_1a5b35bd9fe731e8aa5fd4d8a9ab1c84fc"><code>mu</code></a></a></h4>
+<h4 id="structlion__params__ehc_1a9524673b04570d5dba9d0db1935883f9"><a class="header" href="#structlion__params__ehc_1a9524673b04570d5dba9d0db1935883f9"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__ehc_1a9524673b04570d5dba9d0db1935883f9"><code>kappa</code></a></a></h4>
+<h4 id="structlion__params__ehc_1a8e0d3c318567a1706139e136f7a1d58e"><a class="header" href="#structlion__params__ehc_1a8e0d3c318567a1706139e136f7a1d58e"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__ehc_1a8e0d3c318567a1706139e136f7a1d58e"><code>sigma</code></a></a></h4>
+<h4 id="structlion__params__ehc_1a5c86292fc692cec29282313a85979bfa"><a class="header" href="#structlion__params__ehc_1a5c86292fc692cec29282313a85979bfa"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__ehc_1a5c86292fc692cec29282313a85979bfa"><code>l</code></a></a></h4>
+<h1 id="structlion__params__vft"><a class="header" href="#structlion__params__vft">struct <code>lion_params_vft</code></a></h1>
+<p>Vogel-Fulcher-Tammann model for temperature-dependence of capacity.</p>
+<h2 id="summary-3"><a class="header" href="#summary-3">Summary</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Members</th><th>Descriptions</th></tr></thead><tbody>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__vft_1a7e3f0885f9dd8ba614763e09b5c360b3"><code>k1</code></a></td><td></td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__vft_1ae8e5904115ba9145aedcbe8c8f9cb45b"><code>k2</code></a></td><td></td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__vft_1ab70754854f8ce9cebf7b87c0ade6477d"><code>tref</code></a></td><td>Reference temperature.</td></tr>
+</tbody></table>
+</div>
+<h2 id="members-3"><a class="header" href="#members-3">Members</a></h2>
+<h4 id="structlion__params__vft_1a7e3f0885f9dd8ba614763e09b5c360b3"><a class="header" href="#structlion__params__vft_1a7e3f0885f9dd8ba614763e09b5c360b3"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__vft_1a7e3f0885f9dd8ba614763e09b5c360b3"><code>k1</code></a></a></h4>
+<h4 id="structlion__params__vft_1ae8e5904115ba9145aedcbe8c8f9cb45b"><a class="header" href="#structlion__params__vft_1ae8e5904115ba9145aedcbe8c8f9cb45b"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__vft_1ae8e5904115ba9145aedcbe8c8f9cb45b"><code>k2</code></a></a></h4>
+<h4 id="structlion__params__vft_1ab70754854f8ce9cebf7b87c0ade6477d"><a class="header" href="#structlion__params__vft_1ab70754854f8ce9cebf7b87c0ade6477d"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__vft_1ab70754854f8ce9cebf7b87c0ade6477d"><code>tref</code></a></a></h4>
+<p>Reference temperature.</p>
+<h1 id="structlion__params__temp"><a class="header" href="#structlion__params__temp">struct <code>lion_params_temp</code></a></h1>
+<p>Temperature model parameters.</p>
+<h2 id="summary-4"><a class="header" href="#summary-4">Summary</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Members</th><th>Descriptions</th></tr></thead><tbody>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__temp_1aa5002b70d6a2f32e5698a16483f59aad"><code>cp</code></a></td><td>Heat capacity of the cell.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__temp_1afe82feefd36f2e5fb03986309762af5b"><code>rin</code></a></td><td>Interior-surface thermal resistivity of the cell.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__temp_1a4b8cf335ae41d34ae28140515052fa41"><code>rout</code></a></td><td>Surface-ambient thermal resistivity of the cell.</td></tr>
+</tbody></table>
+</div>
+<h2 id="members-4"><a class="header" href="#members-4">Members</a></h2>
+<h4 id="structlion__params__temp_1aa5002b70d6a2f32e5698a16483f59aad"><a class="header" href="#structlion__params__temp_1aa5002b70d6a2f32e5698a16483f59aad"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__temp_1aa5002b70d6a2f32e5698a16483f59aad"><code>cp</code></a></a></h4>
+<p>Heat capacity of the cell.</p>
+<h4 id="structlion__params__temp_1afe82feefd36f2e5fb03986309762af5b"><a class="header" href="#structlion__params__temp_1afe82feefd36f2e5fb03986309762af5b"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__temp_1afe82feefd36f2e5fb03986309762af5b"><code>rin</code></a></a></h4>
+<p>Interior-surface thermal resistivity of the cell.</p>
+<h4 id="structlion__params__temp_1a4b8cf335ae41d34ae28140515052fa41"><a class="header" href="#structlion__params__temp_1a4b8cf335ae41d34ae28140515052fa41"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__temp_1a4b8cf335ae41d34ae28140515052fa41"><code>rout</code></a></a></h4>
+<p>Surface-ambient thermal resistivity of the cell.</p>
+<h1 id="structlion__params__ocv"><a class="header" href="#structlion__params__ocv">struct <code>lion_params_ocv</code></a></h1>
+<p>Open-circuit voltage model parameters.</p>
+<h2 id="summary-5"><a class="header" href="#summary-5">Summary</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Members</th><th>Descriptions</th></tr></thead><tbody>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__ocv_1a41ab25e174b20d4640f041e4e2649a2c"><code>alpha</code></a></td><td></td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__ocv_1abb6301cc248f8044863e611d2d910ca8"><code>beta</code></a></td><td></td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__ocv_1a6b6467d7c37f165f48d842c52db01984"><code>gamma</code></a></td><td></td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__ocv_1ac41e98a644497dbddb92aec289de0430"><code>v0</code></a></td><td></td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__ocv_1ae5b2a93ee74b927cfdf23660989c95e3"><code>vl</code></a></td><td></td></tr>
+</tbody></table>
+</div>
+<h2 id="members-5"><a class="header" href="#members-5">Members</a></h2>
+<h4 id="structlion__params__ocv_1a41ab25e174b20d4640f041e4e2649a2c"><a class="header" href="#structlion__params__ocv_1a41ab25e174b20d4640f041e4e2649a2c"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__ocv_1a41ab25e174b20d4640f041e4e2649a2c"><code>alpha</code></a></a></h4>
+<h4 id="structlion__params__ocv_1abb6301cc248f8044863e611d2d910ca8"><a class="header" href="#structlion__params__ocv_1abb6301cc248f8044863e611d2d910ca8"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__ocv_1abb6301cc248f8044863e611d2d910ca8"><code>beta</code></a></a></h4>
+<h4 id="structlion__params__ocv_1a6b6467d7c37f165f48d842c52db01984"><a class="header" href="#structlion__params__ocv_1a6b6467d7c37f165f48d842c52db01984"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__ocv_1a6b6467d7c37f165f48d842c52db01984"><code>gamma</code></a></a></h4>
+<h4 id="structlion__params__ocv_1ac41e98a644497dbddb92aec289de0430"><a class="header" href="#structlion__params__ocv_1ac41e98a644497dbddb92aec289de0430"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__ocv_1ac41e98a644497dbddb92aec289de0430"><code>v0</code></a></a></h4>
+<h4 id="structlion__params__ocv_1ae5b2a93ee74b927cfdf23660989c95e3"><a class="header" href="#structlion__params__ocv_1ae5b2a93ee74b927cfdf23660989c95e3"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__ocv_1ae5b2a93ee74b927cfdf23660989c95e3"><code>vl</code></a></a></h4>
+<h1 id="structlion__params__rint__fixed"><a class="header" href="#structlion__params__rint__fixed">struct <code>lion_params_rint_fixed</code></a></h1>
+<p>Fixed internal resistance model.</p>
+<h2 id="summary-6"><a class="header" href="#summary-6">Summary</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Members</th><th>Descriptions</th></tr></thead><tbody>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__rint__fixed_1a3667e058596d93b93573d7d1e6c1dc96"><code>internal_resistance</code></a></td><td>Internal resistance.</td></tr>
+</tbody></table>
+</div>
+<h2 id="members-6"><a class="header" href="#members-6">Members</a></h2>
+<h4 id="structlion__params__rint__fixed_1a3667e058596d93b93573d7d1e6c1dc96"><a class="header" href="#structlion__params__rint__fixed_1a3667e058596d93b93573d7d1e6c1dc96"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__rint__fixed_1a3667e058596d93b93573d7d1e6c1dc96"><code>internal_resistance</code></a></a></h4>
+<p>Internal resistance.</p>
+<h1 id="structlion__params__rint__polarization"><a class="header" href="#structlion__params__rint__polarization">struct <code>lion_params_rint_polarization</code></a></h1>
+<p>Current and state of charge dependent internal resistance model.</p>
+<h2 id="summary-7"><a class="header" href="#summary-7">Summary</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Members</th><th>Descriptions</th></tr></thead><tbody>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#structlion__mf__sigmoid__params"><code>lion_mf_sigmoid_params_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params__rint__polarization_1af43b92346a9afc902bb8c9397d99353d"><code>c40</code></a></td><td>40A charge fuzzy parameters.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#structlion__mf__gaussian__params"><code>lion_mf_gaussian_params_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params__rint__polarization_1aeb921ff5022717558ce8c91fa1245554"><code>c20</code></a></td><td>20A charge fuzzy parameters.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#structlion__mf__gaussian__params"><code>lion_mf_gaussian_params_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params__rint__polarization_1a20552b31bb14b207ea036fef6feb75ff"><code>c10</code></a></td><td>10A charge fuzzy parameters.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#structlion__mf__gaussian__params"><code>lion_mf_gaussian_params_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params__rint__polarization_1a66593871b9fc2fd369889b4abec11bba"><code>c4</code></a></td><td>4A charge fuzzy parameters.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#structlion__mf__gaussian__params"><code>lion_mf_gaussian_params_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params__rint__polarization_1ad0e9d9c5ff7e0181a20924dd62652a46"><code>d5</code></a></td><td>5A discharge fuzzy parameters.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#structlion__mf__gaussian__params"><code>lion_mf_gaussian_params_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params__rint__polarization_1a0c026c2dddd23e221c8752b15e4b0944"><code>d10</code></a></td><td>10A discharge fuzzy parameters.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#structlion__mf__gaussian__params"><code>lion_mf_gaussian_params_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params__rint__polarization_1a02043718046adb179d1f905e879806ff"><code>d15</code></a></td><td>15A discharge fuzzy parameters.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#structlion__mf__sigmoid__params"><code>lion_mf_sigmoid_params_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params__rint__polarization_1ad2f605a1d574fe060d84f8995b816361"><code>d30</code></a></td><td>30A discharge fuzzy parameters.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__rint__polarization_1ac33d7865a87958caea3d58eaf4dc93ba"><code>poly</code></a></td><td>Polynomial coefficients.</td></tr>
+</tbody></table>
+</div>
+<h2 id="members-7"><a class="header" href="#members-7">Members</a></h2>
+<h4 id="structlion__params__rint__polarization_1af43b92346a9afc902bb8c9397d99353d"><a class="header" href="#structlion__params__rint__polarization_1af43b92346a9afc902bb8c9397d99353d"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#structlion__mf__sigmoid__params"><code>lion_mf_sigmoid_params_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params__rint__polarization_1af43b92346a9afc902bb8c9397d99353d"><code>c40</code></a></a></h4>
+<p>40A charge fuzzy parameters.</p>
+<h4 id="structlion__params__rint__polarization_1aeb921ff5022717558ce8c91fa1245554"><a class="header" href="#structlion__params__rint__polarization_1aeb921ff5022717558ce8c91fa1245554"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#structlion__mf__gaussian__params"><code>lion_mf_gaussian_params_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params__rint__polarization_1aeb921ff5022717558ce8c91fa1245554"><code>c20</code></a></a></h4>
+<p>20A charge fuzzy parameters.</p>
+<h4 id="structlion__params__rint__polarization_1a20552b31bb14b207ea036fef6feb75ff"><a class="header" href="#structlion__params__rint__polarization_1a20552b31bb14b207ea036fef6feb75ff"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#structlion__mf__gaussian__params"><code>lion_mf_gaussian_params_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params__rint__polarization_1a20552b31bb14b207ea036fef6feb75ff"><code>c10</code></a></a></h4>
+<p>10A charge fuzzy parameters.</p>
+<h4 id="structlion__params__rint__polarization_1a66593871b9fc2fd369889b4abec11bba"><a class="header" href="#structlion__params__rint__polarization_1a66593871b9fc2fd369889b4abec11bba"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#structlion__mf__gaussian__params"><code>lion_mf_gaussian_params_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params__rint__polarization_1a66593871b9fc2fd369889b4abec11bba"><code>c4</code></a></a></h4>
+<p>4A charge fuzzy parameters.</p>
+<h4 id="structlion__params__rint__polarization_1ad0e9d9c5ff7e0181a20924dd62652a46"><a class="header" href="#structlion__params__rint__polarization_1ad0e9d9c5ff7e0181a20924dd62652a46"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#structlion__mf__gaussian__params"><code>lion_mf_gaussian_params_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params__rint__polarization_1ad0e9d9c5ff7e0181a20924dd62652a46"><code>d5</code></a></a></h4>
+<p>5A discharge fuzzy parameters.</p>
+<h4 id="structlion__params__rint__polarization_1a0c026c2dddd23e221c8752b15e4b0944"><a class="header" href="#structlion__params__rint__polarization_1a0c026c2dddd23e221c8752b15e4b0944"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#structlion__mf__gaussian__params"><code>lion_mf_gaussian_params_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params__rint__polarization_1a0c026c2dddd23e221c8752b15e4b0944"><code>d10</code></a></a></h4>
+<p>10A discharge fuzzy parameters.</p>
+<h4 id="structlion__params__rint__polarization_1a02043718046adb179d1f905e879806ff"><a class="header" href="#structlion__params__rint__polarization_1a02043718046adb179d1f905e879806ff"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#structlion__mf__gaussian__params"><code>lion_mf_gaussian_params_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params__rint__polarization_1a02043718046adb179d1f905e879806ff"><code>d15</code></a></a></h4>
+<p>15A discharge fuzzy parameters.</p>
+<h4 id="structlion__params__rint__polarization_1ad2f605a1d574fe060d84f8995b816361"><a class="header" href="#structlion__params__rint__polarization_1ad2f605a1d574fe060d84f8995b816361"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#structlion__mf__sigmoid__params"><code>lion_mf_sigmoid_params_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params__rint__polarization_1ad2f605a1d574fe060d84f8995b816361"><code>d30</code></a></a></h4>
+<p>30A discharge fuzzy parameters.</p>
+<h4 id="structlion__params__rint__polarization_1ac33d7865a87958caea3d58eaf4dc93ba"><a class="header" href="#structlion__params__rint__polarization_1ac33d7865a87958caea3d58eaf4dc93ba"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__rint__polarization_1ac33d7865a87958caea3d58eaf4dc93ba"><code>poly</code></a></a></h4>
+<p>Polynomial coefficients.</p>
+<h1 id="structlion__params__rint"><a class="header" href="#structlion__params__rint">struct <code>lion_params_rint</code></a></h1>
+<p>Container for the internal resistance model.</p>
+<h2 id="summary-8"><a class="header" href="#summary-8">Summary</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Members</th><th>Descriptions</th></tr></thead><tbody>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga2cc0c1a1359194037b73ab8c61d45c7a"><code>lion_rint_model_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params__rint_1a9cc9493607c4cdab4be1dd33231c660a"><code>model</code></a></td><td>Model to use.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga851f6e7452ee21f794efda4cffbd8ebf"><code>lion_params_rint_fixed_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params__rint_1ad8465e7a3dcf1975407f772842dc70e6"><code>fixed</code></a></td><td></td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gaba96491159ce5a51739d6f3aed3f0fc1"><code>lion_params_rint_polarization_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params__rint_1a24fcb79ec8ee6ed2def925e7b5fe453e"><code>polarization</code></a></td><td></td></tr>
+<tr><td><code>public union </code><a href="reference/api_reference_types.html#structlion__params__rint"><code>lion_params_rint</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params__rint_1aa82b12a8b3343139d4e5f7824834ba01"><code>params</code></a></td><td>Model parameters.</td></tr>
+</tbody></table>
+</div>
+<h2 id="members-8"><a class="header" href="#members-8">Members</a></h2>
+<h4 id="structlion__params__rint_1a9cc9493607c4cdab4be1dd33231c660a"><a class="header" href="#structlion__params__rint_1a9cc9493607c4cdab4be1dd33231c660a"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga2cc0c1a1359194037b73ab8c61d45c7a"><code>lion_rint_model_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params__rint_1a9cc9493607c4cdab4be1dd33231c660a"><code>model</code></a></a></h4>
+<p>Model to use.</p>
+<h4 id="structlion__params__rint_1ad8465e7a3dcf1975407f772842dc70e6"><a class="header" href="#structlion__params__rint_1ad8465e7a3dcf1975407f772842dc70e6"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga851f6e7452ee21f794efda4cffbd8ebf"><code>lion_params_rint_fixed_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params__rint_1ad8465e7a3dcf1975407f772842dc70e6"><code>fixed</code></a></a></h4>
+<h4 id="structlion__params__rint_1a24fcb79ec8ee6ed2def925e7b5fe453e"><a class="header" href="#structlion__params__rint_1a24fcb79ec8ee6ed2def925e7b5fe453e"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gaba96491159ce5a51739d6f3aed3f0fc1"><code>lion_params_rint_polarization_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params__rint_1a24fcb79ec8ee6ed2def925e7b5fe453e"><code>polarization</code></a></a></h4>
+<h4 id="structlion__params__rint_1aa82b12a8b3343139d4e5f7824834ba01"><a class="header" href="#structlion__params__rint_1aa82b12a8b3343139d4e5f7824834ba01"><code>public union </code><a href="reference/api_reference_types.html#structlion__params__rint"><code>lion_params_rint</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params__rint_1aa82b12a8b3343139d4e5f7824834ba01"><code>params</code></a></a></h4>
+<p>Model parameters.</p>
+<h1 id="structlion__params__soh"><a class="header" href="#structlion__params__soh">struct <code>lion_params_soh</code></a></h1>
+<p>Parameters for the degradation model.</p>
+<h2 id="summary-9"><a class="header" href="#summary-9">Summary</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Members</th><th>Descriptions</th></tr></thead><tbody>
+<tr><td><code>public uint64_t </code><a href="reference/api_reference_types.html#structlion__params__soh_1a2ef2c48cb296b10a7fa538ac7734b857"><code>total_cycles</code></a></td><td>Nominal number of cycles the cell has.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__params__soh_1aed5d4d0bb156d1ad7e585cc2c465db3b"><code>final_soh</code></a></td><td>Nominal state of health after <code>total_cycles</code> (end of life)</td></tr>
+</tbody></table>
+</div>
+<h2 id="members-9"><a class="header" href="#members-9">Members</a></h2>
+<h4 id="structlion__params__soh_1a2ef2c48cb296b10a7fa538ac7734b857"><a class="header" href="#structlion__params__soh_1a2ef2c48cb296b10a7fa538ac7734b857"><code>public uint64_t </code><a href="reference/api_reference_types.html#structlion__params__soh_1a2ef2c48cb296b10a7fa538ac7734b857"><code>total_cycles</code></a></a></h4>
+<p>Nominal number of cycles the cell has.</p>
+<h4 id="structlion__params__soh_1aed5d4d0bb156d1ad7e585cc2c465db3b"><a class="header" href="#structlion__params__soh_1aed5d4d0bb156d1ad7e585cc2c465db3b"><code>public double </code><a href="reference/api_reference_types.html#structlion__params__soh_1aed5d4d0bb156d1ad7e585cc2c465db3b"><code>final_soh</code></a></a></h4>
+<p>Nominal state of health after <code>total_cycles</code> (end of life)</p>
+<h1 id="structlion__params"><a class="header" href="#structlion__params">struct <code>lion_params</code></a></h1>
+<p>Parameters of the system.</p>
+<h2 id="summary-10"><a class="header" href="#summary-10">Summary</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Members</th><th>Descriptions</th></tr></thead><tbody>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ffe7fa0a2a711aa74a56f9c64e270fd"><code>lion_params_init_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params_1a3ec7dba201fab9776a993535f4dd007b"><code>init</code></a></td><td>Initial conditions.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga110ae89ae6e1a9e88dcd823407e7a6f5"><code>lion_params_ehc_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params_1a87b398b4f69e5f1e0f644869ca8d6c4a"><code>ehc</code></a></td><td>Entropic heat coefficient.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gab86981023ce45ccd47be86cb00453653"><code>lion_params_ocv_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params_1a05a34f91d2dd803681e4e3a736afb4a2"><code>ocv</code></a></td><td>Open-circuit voltage.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga39a87bd0f30475e011a62b82939598f2"><code>lion_params_vft_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params_1ae971af1cbecc8ce569fe4b50be94a890"><code>vft</code></a></td><td>Temperature-dependence of capacity.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gad653f645ddc01adb042cd3c722cac565"><code>lion_params_temp_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params_1a7fb6c3acf3ec622fe86a8347cbd3cc8b"><code>temp</code></a></td><td>Temperature model.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gaffd5b10ad8e28c00fadb12285a4c4fc2"><code>lion_params_rint_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params_1a19e6a953d7d72527bed384de00bd6e5e"><code>rint</code></a></td><td>Internal resistance model.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gaa11c455b198fc4e2421796fdec959f56"><code>lion_params_soh_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params_1a3cc1f0370e2fcc3d61ba34a15bf94d7d"><code>soh</code></a></td><td>Degradation model.</td></tr>
+</tbody></table>
+</div>
+<h2 id="members-10"><a class="header" href="#members-10">Members</a></h2>
+<h4 id="structlion__params_1a3ec7dba201fab9776a993535f4dd007b"><a class="header" href="#structlion__params_1a3ec7dba201fab9776a993535f4dd007b"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ffe7fa0a2a711aa74a56f9c64e270fd"><code>lion_params_init_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params_1a3ec7dba201fab9776a993535f4dd007b"><code>init</code></a></a></h4>
+<p>Initial conditions.</p>
+<h4 id="structlion__params_1a87b398b4f69e5f1e0f644869ca8d6c4a"><a class="header" href="#structlion__params_1a87b398b4f69e5f1e0f644869ca8d6c4a"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga110ae89ae6e1a9e88dcd823407e7a6f5"><code>lion_params_ehc_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params_1a87b398b4f69e5f1e0f644869ca8d6c4a"><code>ehc</code></a></a></h4>
+<p>Entropic heat coefficient.</p>
+<h4 id="structlion__params_1a05a34f91d2dd803681e4e3a736afb4a2"><a class="header" href="#structlion__params_1a05a34f91d2dd803681e4e3a736afb4a2"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gab86981023ce45ccd47be86cb00453653"><code>lion_params_ocv_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params_1a05a34f91d2dd803681e4e3a736afb4a2"><code>ocv</code></a></a></h4>
+<p>Open-circuit voltage.</p>
+<h4 id="structlion__params_1ae971af1cbecc8ce569fe4b50be94a890"><a class="header" href="#structlion__params_1ae971af1cbecc8ce569fe4b50be94a890"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga39a87bd0f30475e011a62b82939598f2"><code>lion_params_vft_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params_1ae971af1cbecc8ce569fe4b50be94a890"><code>vft</code></a></a></h4>
+<p>Temperature-dependence of capacity.</p>
+<h4 id="structlion__params_1a7fb6c3acf3ec622fe86a8347cbd3cc8b"><a class="header" href="#structlion__params_1a7fb6c3acf3ec622fe86a8347cbd3cc8b"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gad653f645ddc01adb042cd3c722cac565"><code>lion_params_temp_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params_1a7fb6c3acf3ec622fe86a8347cbd3cc8b"><code>temp</code></a></a></h4>
+<p>Temperature model.</p>
+<h4 id="structlion__params_1a19e6a953d7d72527bed384de00bd6e5e"><a class="header" href="#structlion__params_1a19e6a953d7d72527bed384de00bd6e5e"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gaffd5b10ad8e28c00fadb12285a4c4fc2"><code>lion_params_rint_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params_1a19e6a953d7d72527bed384de00bd6e5e"><code>rint</code></a></a></h4>
+<p>Internal resistance model.</p>
+<h4 id="structlion__params_1a3cc1f0370e2fcc3d61ba34a15bf94d7d"><a class="header" href="#structlion__params_1a3cc1f0370e2fcc3d61ba34a15bf94d7d"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gaa11c455b198fc4e2421796fdec959f56"><code>lion_params_soh_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__params_1a3cc1f0370e2fcc3d61ba34a15bf94d7d"><code>soh</code></a></a></h4>
+<p>Degradation model.</p>
+<h1 id="structlion__sim__config"><a class="header" href="#structlion__sim__config">struct <code>lion_sim_config</code></a></h1>
+<p>Simulation metaparameters and hyperparameters.</p>
+<p>These parameters are not associated to the runtime of the sim itself, but rather with its configurations, choice of algorithms, parameters of those algorithms, etc.</p>
+<h2 id="summary-11"><a class="header" href="#summary-11">Summary</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Members</th><th>Descriptions</th></tr></thead><tbody>
+<tr><td><code>public const char * </code><a href="reference/api_reference_types.html#structlion__sim__config_1a2645e85656bf3ab9ba9a3d4788c6015d"><code>sim_name</code></a></td><td>Name of the simulation.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa81dd4d1f7acebaddf727189d9cd5bbe_1gaa81dd4d1f7acebaddf727189d9cd5bbe"><code>lion_regime_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__sim__config_1a1a0dad0300f0ff219a1108fb21df6e4b"><code>sim_regime</code></a></td><td>Regime to simulate.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_ga586717928f0804ceee5a550d7ac94118_1ga586717928f0804ceee5a550d7ac94118"><code>lion_stepper_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__sim__config_1abc032438d83a51eede9a65ff88d3529d"><code>sim_stepper</code></a></td><td>Stepper algorithm.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_ga3f770ea39e62d3fef7525ecfd193323e_1ga3f770ea39e62d3fef7525ecfd193323e"><code>lion_minimizer_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__sim__config_1a2840cd48062a23cc72e1c82abd2dabe3"><code>sim_minimizer</code></a></td><td>Minimizer algorithm.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gac3b206fab2eef1f627bbe62eaf236830_1gac3b206fab2eef1f627bbe62eaf236830"><code>lion_jacobian_method_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__sim__config_1a80b22537a865b138799292ed18ace8e7"><code>sim_jacobian</code></a></td><td>Jacobian method.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__config_1a2c0a744ee9bbb91847755105d1ffad9b"><code>sim_time_seconds</code></a></td><td>Total simulation time in seconds.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__config_1aa913def615167ab99acd101be3a010c1"><code>sim_step_seconds</code></a></td><td>Time of each simulation step in seconds.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__config_1afa13efc7d6642dd88f2d03ba7d409586"><code>sim_epsabs</code></a></td><td>Absolute epsilon for update.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__config_1a3a0352211a0e04bb195b932bc0f54c9a"><code>sim_epsrel</code></a></td><td>Relative epsilon for update.</td></tr>
+<tr><td><code>public uint64_t </code><a href="reference/api_reference_types.html#structlion__sim__config_1aa8fb1ffa31df8d7c9f7f7b6f431d89bb"><code>sim_min_maxiter</code></a></td><td>Maximum iterations of each minimization problem.</td></tr>
+<tr><td><code>public const char * </code><a href="reference/api_reference_types.html#structlion__sim__config_1aeb66bb86d552df72f6261d93e8d86889"><code>log_dir</code></a></td><td>Directory for the logs.</td></tr>
+<tr><td><code>public int </code><a href="reference/api_reference_types.html#structlion__sim__config_1a10aa9aadcce968fe9f2efe7c455831e2"><code>log_stdlvl</code></a></td><td>Level of the stderr logger.</td></tr>
+<tr><td><code>public int </code><a href="reference/api_reference_types.html#structlion__sim__config_1a7f81725e26368d355bafb134bd204856"><code>log_filelvl</code></a></td><td>Level of the file logger.</td></tr>
+</tbody></table>
+</div>
+<h2 id="members-11"><a class="header" href="#members-11">Members</a></h2>
+<h4 id="structlion__sim__config_1a2645e85656bf3ab9ba9a3d4788c6015d"><a class="header" href="#structlion__sim__config_1a2645e85656bf3ab9ba9a3d4788c6015d"><code>public const char * </code><a href="reference/api_reference_types.html#structlion__sim__config_1a2645e85656bf3ab9ba9a3d4788c6015d"><code>sim_name</code></a></a></h4>
+<p>Name of the simulation.</p>
+<h4 id="structlion__sim__config_1a1a0dad0300f0ff219a1108fb21df6e4b"><a class="header" href="#structlion__sim__config_1a1a0dad0300f0ff219a1108fb21df6e4b"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa81dd4d1f7acebaddf727189d9cd5bbe_1gaa81dd4d1f7acebaddf727189d9cd5bbe"><code>lion_regime_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__sim__config_1a1a0dad0300f0ff219a1108fb21df6e4b"><code>sim_regime</code></a></a></h4>
+<p>Regime to simulate.</p>
+<h4 id="structlion__sim__config_1abc032438d83a51eede9a65ff88d3529d"><a class="header" href="#structlion__sim__config_1abc032438d83a51eede9a65ff88d3529d"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_ga586717928f0804ceee5a550d7ac94118_1ga586717928f0804ceee5a550d7ac94118"><code>lion_stepper_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__sim__config_1abc032438d83a51eede9a65ff88d3529d"><code>sim_stepper</code></a></a></h4>
+<p>Stepper algorithm.</p>
+<h4 id="structlion__sim__config_1a2840cd48062a23cc72e1c82abd2dabe3"><a class="header" href="#structlion__sim__config_1a2840cd48062a23cc72e1c82abd2dabe3"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_ga3f770ea39e62d3fef7525ecfd193323e_1ga3f770ea39e62d3fef7525ecfd193323e"><code>lion_minimizer_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__sim__config_1a2840cd48062a23cc72e1c82abd2dabe3"><code>sim_minimizer</code></a></a></h4>
+<p>Minimizer algorithm.</p>
+<h4 id="structlion__sim__config_1a80b22537a865b138799292ed18ace8e7"><a class="header" href="#structlion__sim__config_1a80b22537a865b138799292ed18ace8e7"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gac3b206fab2eef1f627bbe62eaf236830_1gac3b206fab2eef1f627bbe62eaf236830"><code>lion_jacobian_method_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__sim__config_1a80b22537a865b138799292ed18ace8e7"><code>sim_jacobian</code></a></a></h4>
+<p>Jacobian method.</p>
+<h4 id="structlion__sim__config_1a2c0a744ee9bbb91847755105d1ffad9b"><a class="header" href="#structlion__sim__config_1a2c0a744ee9bbb91847755105d1ffad9b"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__config_1a2c0a744ee9bbb91847755105d1ffad9b"><code>sim_time_seconds</code></a></a></h4>
+<p>Total simulation time in seconds.</p>
+<h4 id="structlion__sim__config_1aa913def615167ab99acd101be3a010c1"><a class="header" href="#structlion__sim__config_1aa913def615167ab99acd101be3a010c1"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__config_1aa913def615167ab99acd101be3a010c1"><code>sim_step_seconds</code></a></a></h4>
+<p>Time of each simulation step in seconds.</p>
+<h4 id="structlion__sim__config_1afa13efc7d6642dd88f2d03ba7d409586"><a class="header" href="#structlion__sim__config_1afa13efc7d6642dd88f2d03ba7d409586"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__config_1afa13efc7d6642dd88f2d03ba7d409586"><code>sim_epsabs</code></a></a></h4>
+<p>Absolute epsilon for update.</p>
+<h4 id="structlion__sim__config_1a3a0352211a0e04bb195b932bc0f54c9a"><a class="header" href="#structlion__sim__config_1a3a0352211a0e04bb195b932bc0f54c9a"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__config_1a3a0352211a0e04bb195b932bc0f54c9a"><code>sim_epsrel</code></a></a></h4>
+<p>Relative epsilon for update.</p>
+<h4 id="structlion__sim__config_1aa8fb1ffa31df8d7c9f7f7b6f431d89bb"><a class="header" href="#structlion__sim__config_1aa8fb1ffa31df8d7c9f7f7b6f431d89bb"><code>public uint64_t </code><a href="reference/api_reference_types.html#structlion__sim__config_1aa8fb1ffa31df8d7c9f7f7b6f431d89bb"><code>sim_min_maxiter</code></a></a></h4>
+<p>Maximum iterations of each minimization problem.</p>
+<h4 id="structlion__sim__config_1aeb66bb86d552df72f6261d93e8d86889"><a class="header" href="#structlion__sim__config_1aeb66bb86d552df72f6261d93e8d86889"><code>public const char * </code><a href="reference/api_reference_types.html#structlion__sim__config_1aeb66bb86d552df72f6261d93e8d86889"><code>log_dir</code></a></a></h4>
+<p>Directory for the logs.</p>
+<h4 id="structlion__sim__config_1a10aa9aadcce968fe9f2efe7c455831e2"><a class="header" href="#structlion__sim__config_1a10aa9aadcce968fe9f2efe7c455831e2"><code>public int </code><a href="reference/api_reference_types.html#structlion__sim__config_1a10aa9aadcce968fe9f2efe7c455831e2"><code>log_stdlvl</code></a></a></h4>
+<p>Level of the stderr logger.</p>
+<h4 id="structlion__sim__config_1a7f81725e26368d355bafb134bd204856"><a class="header" href="#structlion__sim__config_1a7f81725e26368d355bafb134bd204856"><code>public int </code><a href="reference/api_reference_types.html#structlion__sim__config_1a7f81725e26368d355bafb134bd204856"><code>log_filelvl</code></a></a></h4>
+<p>Level of the file logger.</p>
+<h1 id="structlion__sim__state"><a class="header" href="#structlion__sim__state">struct <code>lion_sim_state</code></a></h1>
+<p>Simulation state variables.</p>
+<p>This includes all relevant variables of the simulation, including electrical and thermal variables, degradation variables, etc.</p>
+<h2 id="summary-12"><a class="header" href="#summary-12">Summary</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Members</th><th>Descriptions</th></tr></thead><tbody>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a31189b6ef5392ac4588120672b707591"><code>time</code></a></td><td>Simulation time.</td></tr>
+<tr><td><code>public uint64_t </code><a href="reference/api_reference_types.html#structlion__sim__state_1a802f1ebe20a0a2fa8b1ba0488aa8871c"><code>step</code></a></td><td>Simulation step index (starts at 1).</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1ab529e925bfaa2a9ae261ad6d39375c14"><code>power</code></a></td><td>Power being drawn from the cell.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a5e2302404d6caa566e4e5f71f1bd05ea"><code>ambient_temperature</code></a></td><td>Ambient temperature around the cell.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a5a7dd32cfdf0b85ae50b8f7e2f187c30"><code>voltage</code></a></td><td>Voltage in the terminals of the cell.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a823bbf36fb1e06250b5589af5c8a7f78"><code>current</code></a></td><td>Current drawn from the cell.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a51498ce59517409255dc16533b6996b3"><code>ref_open_circuit_voltage</code></a></td><td>Reference open circuit voltage of the cell.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1acef9202ae4dcc803ef352d6c93922fc4"><code>open_circuit_voltage</code></a></td><td>Temperature aware open circuit voltage of the cell.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1abce8d440286d5999027be5a6bcdf87b4"><code>internal_resistance</code></a></td><td>Internal resistance of the cell.</td></tr>
+<tr><td><code>public uint64_t </code><a href="reference/api_reference_types.html#structlion__sim__state_1ab2e6adebb07cc25e58645024d2353011"><code>cycle</code></a></td><td>Number of cycles the battery has been through.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1ad3fd8faa0eb25aa0430c8b57d9e00233"><code>soh</code></a></td><td>State of health of the cell.</td></tr>
+<tr><td><code>public uint64_t </code><a href="reference/api_reference_types.html#structlion__sim__state_1ad1acb934e6b31b91938f40dbc3674ac3"><code>_cycle_step</code></a></td><td>Step within the cycle.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1aa075d02bd42d6665ae132fdac8694209"><code>_soc_mean</code></a></td><td>Average state of charge of the cycle.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1abc6bc0567f6515d803b29eba8709dd3d"><code>_soc_max</code></a></td><td>Maximum state of charge of the cycle.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a8064b61f80d5383001d86deba8d52bad"><code>_soc_min</code></a></td><td>Minimum state of charge of the cycle.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a1dddcc468f962ca56b169cbe5eb38ebb"><code>_acc_discharge</code></a></td><td>Accumulated discharge.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a31364e63b71569d61d36449b0fca9c20"><code>ehc</code></a></td><td>Entropic heat coefficient according to an empirical model.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a333db0e1d19739e9c8002a5e13c05e32"><code>generated_heat</code></a></td><td>Heat generated by the cell due to ohmic and entropic heating.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1ac1d3f355010a27f4f76b1abae9019cda"><code>internal_temperature</code></a></td><td>Internal temperature of the cell.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a4480a3332c3d370407a788cfdefb1c06"><code>surface_temperature</code></a></td><td>Surface temperature of the cell.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a119d7a3f7cbf7f57df910e6a61d9cba5"><code>kappa</code></a></td><td>Dimensionless variable which quantifies the changes in electrolite conductivity.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a70112a302f3558877062ea079feea489"><code>soc_nominal</code></a></td><td>Nominal state of charge.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a7d0f0478f50094a58a622810a605bf10"><code>capacity_nominal</code></a></td><td>Nominal capacity.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a5a72cffb0ff44101be40e3174c83652b"><code>soc_use</code></a></td><td>Usable state of charge considering temperature.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a6ee78a175d8909f0f88e65d2639792bf"><code>capacity_use</code></a></td><td>Usable capacity considering temperature.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1ac581cdd50be1e96c1ebf695a3198032c"><code>_next_soc_nominal</code></a></td><td>Placeholder for the next nominal state of charge.</td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1aa63e6b2be2b98d328aa4b2037cfec639"><code>_next_internal_temperature</code></a></td><td>Placeholder for the next internal temperature.</td></tr>
+</tbody></table>
+</div>
+<h2 id="members-12"><a class="header" href="#members-12">Members</a></h2>
+<h4 id="structlion__sim__state_1a31189b6ef5392ac4588120672b707591"><a class="header" href="#structlion__sim__state_1a31189b6ef5392ac4588120672b707591"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a31189b6ef5392ac4588120672b707591"><code>time</code></a></a></h4>
+<p>Simulation time.</p>
+<h4 id="structlion__sim__state_1a802f1ebe20a0a2fa8b1ba0488aa8871c"><a class="header" href="#structlion__sim__state_1a802f1ebe20a0a2fa8b1ba0488aa8871c"><code>public uint64_t </code><a href="reference/api_reference_types.html#structlion__sim__state_1a802f1ebe20a0a2fa8b1ba0488aa8871c"><code>step</code></a></a></h4>
+<p>Simulation step index (starts at 1).</p>
+<h4 id="structlion__sim__state_1ab529e925bfaa2a9ae261ad6d39375c14"><a class="header" href="#structlion__sim__state_1ab529e925bfaa2a9ae261ad6d39375c14"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1ab529e925bfaa2a9ae261ad6d39375c14"><code>power</code></a></a></h4>
+<p>Power being drawn from the cell.</p>
+<h4 id="structlion__sim__state_1a5e2302404d6caa566e4e5f71f1bd05ea"><a class="header" href="#structlion__sim__state_1a5e2302404d6caa566e4e5f71f1bd05ea"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a5e2302404d6caa566e4e5f71f1bd05ea"><code>ambient_temperature</code></a></a></h4>
+<p>Ambient temperature around the cell.</p>
+<h4 id="structlion__sim__state_1a5a7dd32cfdf0b85ae50b8f7e2f187c30"><a class="header" href="#structlion__sim__state_1a5a7dd32cfdf0b85ae50b8f7e2f187c30"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a5a7dd32cfdf0b85ae50b8f7e2f187c30"><code>voltage</code></a></a></h4>
+<p>Voltage in the terminals of the cell.</p>
+<h4 id="structlion__sim__state_1a823bbf36fb1e06250b5589af5c8a7f78"><a class="header" href="#structlion__sim__state_1a823bbf36fb1e06250b5589af5c8a7f78"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a823bbf36fb1e06250b5589af5c8a7f78"><code>current</code></a></a></h4>
+<p>Current drawn from the cell.</p>
+<h4 id="structlion__sim__state_1a51498ce59517409255dc16533b6996b3"><a class="header" href="#structlion__sim__state_1a51498ce59517409255dc16533b6996b3"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a51498ce59517409255dc16533b6996b3"><code>ref_open_circuit_voltage</code></a></a></h4>
+<p>Reference open circuit voltage of the cell.</p>
+<h4 id="structlion__sim__state_1acef9202ae4dcc803ef352d6c93922fc4"><a class="header" href="#structlion__sim__state_1acef9202ae4dcc803ef352d6c93922fc4"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1acef9202ae4dcc803ef352d6c93922fc4"><code>open_circuit_voltage</code></a></a></h4>
+<p>Temperature aware open circuit voltage of the cell.</p>
+<h4 id="structlion__sim__state_1abce8d440286d5999027be5a6bcdf87b4"><a class="header" href="#structlion__sim__state_1abce8d440286d5999027be5a6bcdf87b4"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1abce8d440286d5999027be5a6bcdf87b4"><code>internal_resistance</code></a></a></h4>
+<p>Internal resistance of the cell.</p>
+<h4 id="structlion__sim__state_1ab2e6adebb07cc25e58645024d2353011"><a class="header" href="#structlion__sim__state_1ab2e6adebb07cc25e58645024d2353011"><code>public uint64_t </code><a href="reference/api_reference_types.html#structlion__sim__state_1ab2e6adebb07cc25e58645024d2353011"><code>cycle</code></a></a></h4>
+<p>Number of cycles the battery has been through.</p>
+<h4 id="structlion__sim__state_1ad3fd8faa0eb25aa0430c8b57d9e00233"><a class="header" href="#structlion__sim__state_1ad3fd8faa0eb25aa0430c8b57d9e00233"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1ad3fd8faa0eb25aa0430c8b57d9e00233"><code>soh</code></a></a></h4>
+<p>State of health of the cell.</p>
+<h4 id="structlion__sim__state_1ad1acb934e6b31b91938f40dbc3674ac3"><a class="header" href="#structlion__sim__state_1ad1acb934e6b31b91938f40dbc3674ac3"><code>public uint64_t </code><a href="reference/api_reference_types.html#structlion__sim__state_1ad1acb934e6b31b91938f40dbc3674ac3"><code>_cycle_step</code></a></a></h4>
+<p>Step within the cycle.</p>
+<h4 id="structlion__sim__state_1aa075d02bd42d6665ae132fdac8694209"><a class="header" href="#structlion__sim__state_1aa075d02bd42d6665ae132fdac8694209"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1aa075d02bd42d6665ae132fdac8694209"><code>_soc_mean</code></a></a></h4>
+<p>Average state of charge of the cycle.</p>
+<h4 id="structlion__sim__state_1abc6bc0567f6515d803b29eba8709dd3d"><a class="header" href="#structlion__sim__state_1abc6bc0567f6515d803b29eba8709dd3d"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1abc6bc0567f6515d803b29eba8709dd3d"><code>_soc_max</code></a></a></h4>
+<p>Maximum state of charge of the cycle.</p>
+<h4 id="structlion__sim__state_1a8064b61f80d5383001d86deba8d52bad"><a class="header" href="#structlion__sim__state_1a8064b61f80d5383001d86deba8d52bad"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a8064b61f80d5383001d86deba8d52bad"><code>_soc_min</code></a></a></h4>
+<p>Minimum state of charge of the cycle.</p>
+<h4 id="structlion__sim__state_1a1dddcc468f962ca56b169cbe5eb38ebb"><a class="header" href="#structlion__sim__state_1a1dddcc468f962ca56b169cbe5eb38ebb"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a1dddcc468f962ca56b169cbe5eb38ebb"><code>_acc_discharge</code></a></a></h4>
+<p>Accumulated discharge.</p>
+<h4 id="structlion__sim__state_1a31364e63b71569d61d36449b0fca9c20"><a class="header" href="#structlion__sim__state_1a31364e63b71569d61d36449b0fca9c20"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a31364e63b71569d61d36449b0fca9c20"><code>ehc</code></a></a></h4>
+<p>Entropic heat coefficient according to an empirical model.</p>
+<h4 id="structlion__sim__state_1a333db0e1d19739e9c8002a5e13c05e32"><a class="header" href="#structlion__sim__state_1a333db0e1d19739e9c8002a5e13c05e32"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a333db0e1d19739e9c8002a5e13c05e32"><code>generated_heat</code></a></a></h4>
+<p>Heat generated by the cell due to ohmic and entropic heating.</p>
+<h4 id="structlion__sim__state_1ac1d3f355010a27f4f76b1abae9019cda"><a class="header" href="#structlion__sim__state_1ac1d3f355010a27f4f76b1abae9019cda"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1ac1d3f355010a27f4f76b1abae9019cda"><code>internal_temperature</code></a></a></h4>
+<p>Internal temperature of the cell.</p>
+<h4 id="structlion__sim__state_1a4480a3332c3d370407a788cfdefb1c06"><a class="header" href="#structlion__sim__state_1a4480a3332c3d370407a788cfdefb1c06"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a4480a3332c3d370407a788cfdefb1c06"><code>surface_temperature</code></a></a></h4>
+<p>Surface temperature of the cell.</p>
+<h4 id="structlion__sim__state_1a119d7a3f7cbf7f57df910e6a61d9cba5"><a class="header" href="#structlion__sim__state_1a119d7a3f7cbf7f57df910e6a61d9cba5"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a119d7a3f7cbf7f57df910e6a61d9cba5"><code>kappa</code></a></a></h4>
+<p>Dimensionless variable which quantifies the changes in electrolite conductivity.</p>
+<h4 id="structlion__sim__state_1a70112a302f3558877062ea079feea489"><a class="header" href="#structlion__sim__state_1a70112a302f3558877062ea079feea489"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a70112a302f3558877062ea079feea489"><code>soc_nominal</code></a></a></h4>
+<p>Nominal state of charge.</p>
+<h4 id="structlion__sim__state_1a7d0f0478f50094a58a622810a605bf10"><a class="header" href="#structlion__sim__state_1a7d0f0478f50094a58a622810a605bf10"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a7d0f0478f50094a58a622810a605bf10"><code>capacity_nominal</code></a></a></h4>
+<p>Nominal capacity.</p>
+<h4 id="structlion__sim__state_1a5a72cffb0ff44101be40e3174c83652b"><a class="header" href="#structlion__sim__state_1a5a72cffb0ff44101be40e3174c83652b"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a5a72cffb0ff44101be40e3174c83652b"><code>soc_use</code></a></a></h4>
+<p>Usable state of charge considering temperature.</p>
+<h4 id="structlion__sim__state_1a6ee78a175d8909f0f88e65d2639792bf"><a class="header" href="#structlion__sim__state_1a6ee78a175d8909f0f88e65d2639792bf"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1a6ee78a175d8909f0f88e65d2639792bf"><code>capacity_use</code></a></a></h4>
+<p>Usable capacity considering temperature.</p>
+<h4 id="structlion__sim__state_1ac581cdd50be1e96c1ebf695a3198032c"><a class="header" href="#structlion__sim__state_1ac581cdd50be1e96c1ebf695a3198032c"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1ac581cdd50be1e96c1ebf695a3198032c"><code>_next_soc_nominal</code></a></a></h4>
+<p>Placeholder for the next nominal state of charge.</p>
+<h4 id="structlion__sim__state_1aa63e6b2be2b98d328aa4b2037cfec639"><a class="header" href="#structlion__sim__state_1aa63e6b2be2b98d328aa4b2037cfec639"><code>public double </code><a href="reference/api_reference_types.html#structlion__sim__state_1aa63e6b2be2b98d328aa4b2037cfec639"><code>_next_internal_temperature</code></a></a></h4>
+<p>Placeholder for the next internal temperature.</p>
+<h1 id="structlion__slv__inputs"><a class="header" href="#structlion__slv__inputs">struct <code>lion_slv_inputs</code></a></h1>
+<p>Inputs for the solver.</p>
+<p>Both the current state and the parameters of the system are passed at each iteration of the solver, to be used for the update function as well as the Jacobian calculation.</p>
+<h2 id="summary-13"><a class="header" href="#summary-13">Summary</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Members</th><th>Descriptions</th></tr></thead><tbody>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gad12500d333f84e68247e9e7604c0cac5_1gad12500d333f84e68247e9e7604c0cac5"><code>lion_sim_state_t</code></a><code>*</code><a href="reference/api_reference_types.html#structlion__slv__inputs_1abd2c5ef17b7468bf2a07580a6467b8f1"><code>sys_inputs</code></a></td><td>System state.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga456874d0aab89eef32d4212ff81005c6"><code>lion_params_t</code></a><code>*</code><a href="reference/api_reference_types.html#structlion__slv__inputs_1ab184625d65821dea5c574d469c1bf182"><code>sys_params</code></a></td><td>System parameters.</td></tr>
+</tbody></table>
+</div>
+<h2 id="members-13"><a class="header" href="#members-13">Members</a></h2>
+<h4 id="structlion__slv__inputs_1abd2c5ef17b7468bf2a07580a6467b8f1"><a class="header" href="#structlion__slv__inputs_1abd2c5ef17b7468bf2a07580a6467b8f1"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gad12500d333f84e68247e9e7604c0cac5_1gad12500d333f84e68247e9e7604c0cac5"><code>lion_sim_state_t</code></a><code>*</code><a href="reference/api_reference_types.html#structlion__slv__inputs_1abd2c5ef17b7468bf2a07580a6467b8f1"><code>sys_inputs</code></a></a></h4>
+<p>System state.</p>
+<h4 id="structlion__slv__inputs_1ab184625d65821dea5c574d469c1bf182"><a class="header" href="#structlion__slv__inputs_1ab184625d65821dea5c574d469c1bf182"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga456874d0aab89eef32d4212ff81005c6"><code>lion_params_t</code></a><code>*</code><a href="reference/api_reference_types.html#structlion__slv__inputs_1ab184625d65821dea5c574d469c1bf182"><code>sys_params</code></a></a></h4>
+<p>System parameters.</p>
+<h1 id="structlion__sim"><a class="header" href="#structlion__sim">struct <code>lion_sim</code></a></h1>
+<p>Simulation runtime, used for setup and simulation.</p>
+<p>This contains all the variables which will be used by the simulation, both during the setup and during the runtime on a step-by-step basis.</p>
+<h2 id="summary-14"><a class="header" href="#summary-14">Summary</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Members</th><th>Descriptions</th></tr></thead><tbody>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_ga8a9770c4d58c262c80f8b91c87748056_1ga8a9770c4d58c262c80f8b91c87748056"><code>lion_sim_config_t</code></a><code>*</code><a href="reference/api_reference_types.html#structlion__sim_1aa703546c5b59b3a1ad051e36cf30d4d9"><code>conf</code></a></td><td>Hyperparameters and sim metadata.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga456874d0aab89eef32d4212ff81005c6"><code>lion_params_t</code></a><code>*</code><a href="reference/api_reference_types.html#structlion__sim_1af996afba263ea74629f3d24017a1a048"><code>params</code></a></td><td>System parameters.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gad12500d333f84e68247e9e7604c0cac5_1gad12500d333f84e68247e9e7604c0cac5"><code>lion_sim_state_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__sim_1a793c7facf0e16b443afba8e90ea9f2d6"><code>state</code></a></td><td>System state.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gad5c34288afa099184aea6b78f5584ce7_1gad5c34288afa099184aea6b78f5584ce7"><code>lion_slv_inputs_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__sim_1a344a358f07df9be30b5cdacd270e1503"><code>inputs</code></a></td><td>Inputs to the solver.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code>(* </code><a href="reference/api_reference_types.html#structlion__sim_1a90bb69f9f55f5445323c0e1ab99fa577"><code>init_hook</code></a></td><td>Hook called upon initialization.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code>(* </code><a href="reference/api_reference_types.html#structlion__sim_1a35303f704a75c83e75e27d1da3f36326"><code>update_hook</code></a></td><td>Hook called on each update of the simulation.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code>(* </code><a href="reference/api_reference_types.html#structlion__sim_1a90fa8e0febdb503d5f6a199d04f0a4bd"><code>finished_hook</code></a></td><td>Hook called when the simulation is finished.</td></tr>
+<tr><td><code>public gsl_odeiv2_system </code><a href="reference/api_reference_types.html#structlion__sim_1a76ebbb727381ba0c4bf2308888ce793b"><code>sys</code></a></td><td>Handle to the ode system.</td></tr>
+<tr><td><code>public gsl_odeiv2_driver * </code><a href="reference/api_reference_types.html#structlion__sim_1a53ff58408d42bca301984f8ef3132b82"><code>driver</code></a></td><td>Driver for the ode system.</td></tr>
+<tr><td><code>public gsl_min_fminimizer * </code><a href="reference/api_reference_types.html#structlion__sim_1acba1fe9ea24d9b1eacd1771382da7fe2"><code>sys_min</code></a></td><td>Handle to the minimizer.</td></tr>
+<tr><td><code>public const gsl_odeiv2_step_type * </code><a href="reference/api_reference_types.html#structlion__sim_1aef2f0219f317abfdd6bb225d5a5a32b8"><code>step_type</code></a></td><td>Stepper used by the ode system.</td></tr>
+<tr><td><code>public const gsl_min_fminimizer_type * </code><a href="reference/api_reference_types.html#structlion__sim_1a2423662d3b4d470821813403bfefc1eb"><code>minimizer</code></a></td><td>Minimizer used by the optimizer.</td></tr>
+<tr><td><code>public char </code><a href="reference/api_reference_types.html#structlion__sim_1a22252029c7ec53e5a06dd3b11dc78184"><code>log_filename</code></a></td><td>Name of the log file.</td></tr>
+<tr><td><code>public FILE * </code><a href="reference/api_reference_types.html#structlion__sim_1a8dcd30cd44b44571d77f8497ea1fb681"><code>log_file</code></a></td><td>Handle to the log file.</td></tr>
+<tr><td><code>public int64_t </code><a href="reference/api_reference_types.html#structlion__sim_1a53b1e13f05af21fe0a7070806ae264b6"><code>_idebug_malloced_total</code></a></td><td></td></tr>
+<tr><td><code>public size_t </code><a href="reference/api_reference_types.html#structlion__sim_1a7786427fe3f7e023473442f378e63cd6"><code>_idebug_malloced_size</code></a></td><td></td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#struct__idebug__heap__info"><code>_idebug_heap_info_t</code></a><code>*</code><a href="reference/api_reference_types.html#structlion__sim_1a80c227a6fdad6a488fad3115bec4f095"><code>_idebug_heap_head</code></a></td><td></td></tr>
+</tbody></table>
+</div>
+<h2 id="members-14"><a class="header" href="#members-14">Members</a></h2>
+<h4 id="structlion__sim_1aa703546c5b59b3a1ad051e36cf30d4d9"><a class="header" href="#structlion__sim_1aa703546c5b59b3a1ad051e36cf30d4d9"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_ga8a9770c4d58c262c80f8b91c87748056_1ga8a9770c4d58c262c80f8b91c87748056"><code>lion_sim_config_t</code></a><code>*</code><a href="reference/api_reference_types.html#structlion__sim_1aa703546c5b59b3a1ad051e36cf30d4d9"><code>conf</code></a></a></h4>
+<p>Hyperparameters and sim metadata.</p>
+<h4 id="structlion__sim_1af996afba263ea74629f3d24017a1a048"><a class="header" href="#structlion__sim_1af996afba263ea74629f3d24017a1a048"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga456874d0aab89eef32d4212ff81005c6"><code>lion_params_t</code></a><code>*</code><a href="reference/api_reference_types.html#structlion__sim_1af996afba263ea74629f3d24017a1a048"><code>params</code></a></a></h4>
+<p>System parameters.</p>
+<h4 id="structlion__sim_1a793c7facf0e16b443afba8e90ea9f2d6"><a class="header" href="#structlion__sim_1a793c7facf0e16b443afba8e90ea9f2d6"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gad12500d333f84e68247e9e7604c0cac5_1gad12500d333f84e68247e9e7604c0cac5"><code>lion_sim_state_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__sim_1a793c7facf0e16b443afba8e90ea9f2d6"><code>state</code></a></a></h4>
+<p>System state.</p>
+<h4 id="structlion__sim_1a344a358f07df9be30b5cdacd270e1503"><a class="header" href="#structlion__sim_1a344a358f07df9be30b5cdacd270e1503"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gad5c34288afa099184aea6b78f5584ce7_1gad5c34288afa099184aea6b78f5584ce7"><code>lion_slv_inputs_t</code></a><code> </code><a href="reference/api_reference_types.html#structlion__sim_1a344a358f07df9be30b5cdacd270e1503"><code>inputs</code></a></a></h4>
+<p>Inputs to the solver.</p>
+<h4 id="structlion__sim_1a90bb69f9f55f5445323c0e1ab99fa577"><a class="header" href="#structlion__sim_1a90bb69f9f55f5445323c0e1ab99fa577"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code>(* </code><a href="reference/api_reference_types.html#structlion__sim_1a90bb69f9f55f5445323c0e1ab99fa577"><code>init_hook</code></a></a></h4>
+<p>Hook called upon initialization.</p>
+<h4 id="structlion__sim_1a35303f704a75c83e75e27d1da3f36326"><a class="header" href="#structlion__sim_1a35303f704a75c83e75e27d1da3f36326"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code>(* </code><a href="reference/api_reference_types.html#structlion__sim_1a35303f704a75c83e75e27d1da3f36326"><code>update_hook</code></a></a></h4>
+<p>Hook called on each update of the simulation.</p>
+<h4 id="structlion__sim_1a90fa8e0febdb503d5f6a199d04f0a4bd"><a class="header" href="#structlion__sim_1a90fa8e0febdb503d5f6a199d04f0a4bd"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code>(* </code><a href="reference/api_reference_types.html#structlion__sim_1a90fa8e0febdb503d5f6a199d04f0a4bd"><code>finished_hook</code></a></a></h4>
+<p>Hook called when the simulation is finished.</p>
+<h4 id="structlion__sim_1a76ebbb727381ba0c4bf2308888ce793b"><a class="header" href="#structlion__sim_1a76ebbb727381ba0c4bf2308888ce793b"><code>public gsl_odeiv2_system </code><a href="reference/api_reference_types.html#structlion__sim_1a76ebbb727381ba0c4bf2308888ce793b"><code>sys</code></a></a></h4>
+<p>Handle to the ode system.</p>
+<h4 id="structlion__sim_1a53ff58408d42bca301984f8ef3132b82"><a class="header" href="#structlion__sim_1a53ff58408d42bca301984f8ef3132b82"><code>public gsl_odeiv2_driver * </code><a href="reference/api_reference_types.html#structlion__sim_1a53ff58408d42bca301984f8ef3132b82"><code>driver</code></a></a></h4>
+<p>Driver for the ode system.</p>
+<h4 id="structlion__sim_1acba1fe9ea24d9b1eacd1771382da7fe2"><a class="header" href="#structlion__sim_1acba1fe9ea24d9b1eacd1771382da7fe2"><code>public gsl_min_fminimizer * </code><a href="reference/api_reference_types.html#structlion__sim_1acba1fe9ea24d9b1eacd1771382da7fe2"><code>sys_min</code></a></a></h4>
+<p>Handle to the minimizer.</p>
+<h4 id="structlion__sim_1aef2f0219f317abfdd6bb225d5a5a32b8"><a class="header" href="#structlion__sim_1aef2f0219f317abfdd6bb225d5a5a32b8"><code>public const gsl_odeiv2_step_type * </code><a href="reference/api_reference_types.html#structlion__sim_1aef2f0219f317abfdd6bb225d5a5a32b8"><code>step_type</code></a></a></h4>
+<p>Stepper used by the ode system.</p>
+<h4 id="structlion__sim_1a2423662d3b4d470821813403bfefc1eb"><a class="header" href="#structlion__sim_1a2423662d3b4d470821813403bfefc1eb"><code>public const gsl_min_fminimizer_type * </code><a href="reference/api_reference_types.html#structlion__sim_1a2423662d3b4d470821813403bfefc1eb"><code>minimizer</code></a></a></h4>
+<p>Minimizer used by the optimizer.</p>
+<h4 id="structlion__sim_1a22252029c7ec53e5a06dd3b11dc78184"><a class="header" href="#structlion__sim_1a22252029c7ec53e5a06dd3b11dc78184"><code>public char </code><a href="reference/api_reference_types.html#structlion__sim_1a22252029c7ec53e5a06dd3b11dc78184"><code>log_filename</code></a></a></h4>
+<p>Name of the log file.</p>
+<h4 id="structlion__sim_1a8dcd30cd44b44571d77f8497ea1fb681"><a class="header" href="#structlion__sim_1a8dcd30cd44b44571d77f8497ea1fb681"><code>public FILE * </code><a href="reference/api_reference_types.html#structlion__sim_1a8dcd30cd44b44571d77f8497ea1fb681"><code>log_file</code></a></a></h4>
+<p>Handle to the log file.</p>
+<h4 id="structlion__sim_1a53b1e13f05af21fe0a7070806ae264b6"><a class="header" href="#structlion__sim_1a53b1e13f05af21fe0a7070806ae264b6"><code>public int64_t </code><a href="reference/api_reference_types.html#structlion__sim_1a53b1e13f05af21fe0a7070806ae264b6"><code>_idebug_malloced_total</code></a></a></h4>
+<h4 id="structlion__sim_1a7786427fe3f7e023473442f378e63cd6"><a class="header" href="#structlion__sim_1a7786427fe3f7e023473442f378e63cd6"><code>public size_t </code><a href="reference/api_reference_types.html#structlion__sim_1a7786427fe3f7e023473442f378e63cd6"><code>_idebug_malloced_size</code></a></a></h4>
+<h4 id="structlion__sim_1a80c227a6fdad6a488fad3115bec4f095"><a class="header" href="#structlion__sim_1a80c227a6fdad6a488fad3115bec4f095"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#struct__idebug__heap__info"><code>_idebug_heap_info_t</code></a><code>*</code><a href="reference/api_reference_types.html#structlion__sim_1a80c227a6fdad6a488fad3115bec4f095"><code>_idebug_heap_head</code></a></a></h4>
+<h1 id="structlion__version"><a class="header" href="#structlion__version">struct <code>lion_version</code></a></h1>
+<p>Version of the simulator.</p>
+<h2 id="summary-15"><a class="header" href="#summary-15">Summary</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Members</th><th>Descriptions</th></tr></thead><tbody>
+<tr><td><code>public const char * </code><a href="reference/api_reference_types.html#structlion__version_1a69474473440860f763912ff941158a5e"><code>major</code></a></td><td>Major version.</td></tr>
+<tr><td><code>public const char * </code><a href="reference/api_reference_types.html#structlion__version_1a425738df97651b3f276f88f7d8b77759"><code>minor</code></a></td><td>Minor version.</td></tr>
+<tr><td><code>public const char * </code><a href="reference/api_reference_types.html#structlion__version_1a19b5b082859737ea4e47153db9902ed5"><code>patch</code></a></td><td>Patch number.</td></tr>
+</tbody></table>
+</div>
+<h2 id="members-15"><a class="header" href="#members-15">Members</a></h2>
+<h4 id="structlion__version_1a69474473440860f763912ff941158a5e"><a class="header" href="#structlion__version_1a69474473440860f763912ff941158a5e"><code>public const char * </code><a href="reference/api_reference_types.html#structlion__version_1a69474473440860f763912ff941158a5e"><code>major</code></a></a></h4>
+<p>Major version.</p>
+<h4 id="structlion__version_1a425738df97651b3f276f88f7d8b77759"><a class="header" href="#structlion__version_1a425738df97651b3f276f88f7d8b77759"><code>public const char * </code><a href="reference/api_reference_types.html#structlion__version_1a425738df97651b3f276f88f7d8b77759"><code>minor</code></a></a></h4>
+<p>Minor version.</p>
+<h4 id="structlion__version_1a19b5b082859737ea4e47153db9902ed5"><a class="header" href="#structlion__version_1a19b5b082859737ea4e47153db9902ed5"><code>public const char * </code><a href="reference/api_reference_types.html#structlion__version_1a19b5b082859737ea4e47153db9902ed5"><code>patch</code></a></a></h4>
+<p>Patch number.</p>
+<h1 id="structlion__vector"><a class="header" href="#structlion__vector">struct <code>lion_vector</code></a></h1>
+<p>Variable length vector of data.</p>
+<h2 id="summary-16"><a class="header" href="#summary-16">Summary</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Members</th><th>Descriptions</th></tr></thead><tbody>
+<tr><td><code>public void * </code><a href="reference/api_reference_types.html#structlion__vector_1a21d517cd17c64f7e9361d0efe49925d7"><code>data</code></a></td><td>Data container in heap.</td></tr>
+<tr><td><code>public size_t </code><a href="reference/api_reference_types.html#structlion__vector_1ad59ef5fd0bf727aa3042e64c85e33b07"><code>data_size</code></a></td><td>Size of each element.</td></tr>
+<tr><td><code>public size_t </code><a href="reference/api_reference_types.html#structlion__vector_1a0270a76dd017aef124268c51d6be87bd"><code>len</code></a></td><td>Length of the vector.</td></tr>
+<tr><td><code>public size_t </code><a href="reference/api_reference_types.html#structlion__vector_1ade9db55ef53759d4b132e7d8e2a1b8a2"><code>capacity</code></a></td><td>Capacity of the vector.</td></tr>
+</tbody></table>
+</div>
+<h2 id="members-16"><a class="header" href="#members-16">Members</a></h2>
+<h4 id="structlion__vector_1a21d517cd17c64f7e9361d0efe49925d7"><a class="header" href="#structlion__vector_1a21d517cd17c64f7e9361d0efe49925d7"><code>public void * </code><a href="reference/api_reference_types.html#structlion__vector_1a21d517cd17c64f7e9361d0efe49925d7"><code>data</code></a></a></h4>
+<p>Data container in heap.</p>
+<h4 id="structlion__vector_1ad59ef5fd0bf727aa3042e64c85e33b07"><a class="header" href="#structlion__vector_1ad59ef5fd0bf727aa3042e64c85e33b07"><code>public size_t </code><a href="reference/api_reference_types.html#structlion__vector_1ad59ef5fd0bf727aa3042e64c85e33b07"><code>data_size</code></a></a></h4>
+<p>Size of each element.</p>
+<h4 id="structlion__vector_1a0270a76dd017aef124268c51d6be87bd"><a class="header" href="#structlion__vector_1a0270a76dd017aef124268c51d6be87bd"><code>public size_t </code><a href="reference/api_reference_types.html#structlion__vector_1a0270a76dd017aef124268c51d6be87bd"><code>len</code></a></a></h4>
+<p>Length of the vector.</p>
+<h4 id="structlion__vector_1ade9db55ef53759d4b132e7d8e2a1b8a2"><a class="header" href="#structlion__vector_1ade9db55ef53759d4b132e7d8e2a1b8a2"><code>public size_t </code><a href="reference/api_reference_types.html#structlion__vector_1ade9db55ef53759d4b132e7d8e2a1b8a2"><code>capacity</code></a></a></h4>
+<p>Capacity of the vector.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="group__functions"><a class="header" href="#group__functions">group <code>functions</code></a></h1>
+<h2 id="summary-17"><a class="header" href="#summary-17">Summary</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Members</th><th>Descriptions</th></tr></thead><tbody>
+<tr><td><code>public const char * </code><a href="reference/api_reference_functions.html#group__functions_1gaf93e26d7c1fd310895346b5d445e5241"><code>lion_regime_name</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa81dd4d1f7acebaddf727189d9cd5bbe_1gaa81dd4d1f7acebaddf727189d9cd5bbe"><code>lion_regime_t</code></a><code> regime)</code></td><td>Get the name of the regime.</td></tr>
+<tr><td><code>public const char * </code><a href="reference/api_reference_functions.html#group__functions_1ga617292d3a33b374cf2e2e271a574e403"><code>lion_stepper_name</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_ga586717928f0804ceee5a550d7ac94118_1ga586717928f0804ceee5a550d7ac94118"><code>lion_stepper_t</code></a><code> stepper)</code></td><td>Get the name of the stepper.</td></tr>
+<tr><td><code>public const char * </code><a href="reference/api_reference_functions.html#group__functions_1ga0f27c3adc7a8e52407c0503330fd1cd4"><code>lion_minimizer_name</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_ga3f770ea39e62d3fef7525ecfd193323e_1ga3f770ea39e62d3fef7525ecfd193323e"><code>lion_minimizer_t</code></a><code> minimizer)</code></td><td>Get the name of the minimizer.</td></tr>
+<tr><td><code>public const char * </code><a href="reference/api_reference_functions.html#group__functions_1gaee4b6b94c7518ca866bb9f2ecfd25959"><code>lion_gsl_errno_name</code></a><code>(const int num)</code></td><td>Get the name of the GSL error number.</td></tr>
+<tr><td><code>public const char * </code><a href="reference/api_reference_functions.html#group__functions_1ga0ee73f1faf952a7b5e555afb2026f1c5"><code>lion_jacobian_name</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gac3b206fab2eef1f627bbe62eaf236830_1gac3b206fab2eef1f627bbe62eaf236830"><code>lion_jacobian_method_t</code></a><code> jacobian)</code></td><td>Get the name of a jacobian calculation method.</td></tr>
+<tr><td><code>public const char * </code><a href="reference/api_reference_functions.html#group__functions_1gaf99e93490ff25522e9a21abf28748a17"><code>lion_params_rint_get_name</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga2cc0c1a1359194037b73ab8c61d45c7a"><code>lion_rint_model_t</code></a><code> model)</code></td><td>Get the name of the internal resistance model.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ffe7fa0a2a711aa74a56f9c64e270fd"><code>lion_params_init_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1ga9a9d244ce04425fb62d916adac779650"><code>lion_params_default_init</code></a><code>(void)</code></td><td>Get default initial conditions parameters.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga110ae89ae6e1a9e88dcd823407e7a6f5"><code>lion_params_ehc_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1gac8ab90bb1f69a0017043d06c684121e0"><code>lion_params_default_ehc</code></a><code>(void)</code></td><td>Get default entropic heat coefficient parameters.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gab86981023ce45ccd47be86cb00453653"><code>lion_params_ocv_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1ga9b7e0fa4d6631ba9e49569672244bc18"><code>lion_params_default_ocv</code></a><code>(void)</code></td><td>Get default open-circuit voltage parameters.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga39a87bd0f30475e011a62b82939598f2"><code>lion_params_vft_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1ga67139df6eca3e62f7cacb51ce1f24a2f"><code>lion_params_default_vft</code></a><code>(void)</code></td><td>Get default capacity parameters.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gad653f645ddc01adb042cd3c722cac565"><code>lion_params_temp_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1gaa901a79a8543206b3473ffcad6f16be8"><code>lion_params_default_temp</code></a><code>(void)</code></td><td>Get default temperature parameters.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga851f6e7452ee21f794efda4cffbd8ebf"><code>lion_params_rint_fixed_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1gaa26ce84ed464b5e9f4717a473345870e"><code>lion_params_default_rint_fixed</code></a><code>(void)</code></td><td>Get default fixed internal resistance parameters.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gaba96491159ce5a51739d6f3aed3f0fc1"><code>lion_params_rint_polarization_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1ga165d77134ecb89a8f354ecee4380f8d8"><code>lion_params_default_rint_polarization</code></a><code>(void)</code></td><td>Get default polarization internal resistance parameters.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gaffd5b10ad8e28c00fadb12285a4c4fc2"><code>lion_params_rint_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1ga96ea57a4d8db3385aba9b041c133f37c"><code>lion_params_default_rint</code></a><code>(void)</code></td><td>Get default internal resistance parameters.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gaa11c455b198fc4e2421796fdec959f56"><code>lion_params_soh_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1ga63e1aafe0805801ee8aff81ca67b0951"><code>lion_params_default_soh</code></a><code>(void)</code></td><td>Get default degradation model parameters.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga456874d0aab89eef32d4212ff81005c6"><code>lion_params_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1ga9293af4a9fd61e74aba596241686c427"><code>lion_params_default</code></a><code>(void)</code></td><td>Get default system parameters.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_ga52dbb5712a734cd99193b50d3f8a9ce2_1ga52dbb5712a734cd99193b50d3f8a9ce2"><code>lion_sim_config_new</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_ga8a9770c4d58c262c80f8b91c87748056_1ga8a9770c4d58c262c80f8b91c87748056"><code>lion_sim_config_t</code></a><code> * out)</code></td><td>Create a new configuration.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_ga8a9770c4d58c262c80f8b91c87748056_1ga8a9770c4d58c262c80f8b91c87748056"><code>lion_sim_config_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1gaf902ac0a9578af3bd17fc138ded06e97"><code>lion_sim_config_default</code></a><code>(void)</code></td><td>Create a default configuration.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_gaf9d436cf7efe22528155c4994158083f_1gaf9d436cf7efe22528155c4994158083f"><code>lion_sim_new</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_ga8a9770c4d58c262c80f8b91c87748056_1ga8a9770c4d58c262c80f8b91c87748056"><code>lion_sim_config_t</code></a><code> * conf,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga456874d0aab89eef32d4212ff81005c6"><code>lion_params_t</code></a><code> * params,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * out)</code></td><td>Create a new simulation.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1gaf0ddcea19692192c7505f0608a9041d1"><code>lion_sim_init</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim)</code></td><td>Initialize the simulation.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1ga2412b8bc45b356b099ddc7853cfa3eea"><code>lion_sim_reset</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim)</code></td><td>Reset the simulation.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_ga492cf08831b1cae560c9bf0aed87fd6c_1ga492cf08831b1cae560c9bf0aed87fd6c"><code>lion_sim_step</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,double power,double ambient_temperature)</code></td><td>Step the simulation in time.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_gaf58bb933c9ee80445768eacf4417c4af_1gaf58bb933c9ee80445768eacf4417c4af"><code>lion_sim_run</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * power,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * ambient_temperature)</code></td><td>Runs the simulation.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gab0b8ddabaacc9299da81a42c188d2723"><code>lion_version_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1ga6e5ce563179a42053e55e355bef35864"><code>lion_sim_get_version</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim)</code></td><td>Get the version of the simulator.</td></tr>
+<tr><td><code>public int </code><a href="reference/api_reference_functions.html#group__functions_1gaa69ed18945a78b81f11a4041bb31d4bc"><code>lion_sim_should_close</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim)</code></td><td>Check whether the simulation should close.</td></tr>
+<tr><td><code>public uint64_t </code><a href="reference/api_reference_functions.html#group__functions_1ga266d416a2bb3394bf5a9228cda300585"><code>lion_sim_max_iters</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim)</code></td><td>Get the max number of iterations.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1ga9f6e757ff258cdf5d5df0eba7103e08c"><code>lion_sim_cleanup</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim)</code></td><td>Clean up the simulation.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_ga2439c677dd3f5d951182583c619215bb_1ga2439c677dd3f5d951182583c619215bb"><code>lion_vector_new</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,const size_t data_size,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * out)</code></td><td>Create new empty vector.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_gaec82027a4b6f0b0517b86319560e0dc9_1gaec82027a4b6f0b0517b86319560e0dc9"><code>lion_vector_zero</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,const size_t len,const size_t data_size,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * out)</code></td><td>Create new vector filled with zeros.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_ga7220a18b454c140cbfe49a4fe4d25d17_1ga7220a18b454c140cbfe49a4fe4d25d17"><code>lion_vector_with_capacity</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,const size_t capacity,const size_t data_size,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * out)</code></td><td>Create empty vector with preallocated size.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_gaef1a08fdcf6ec1835d042d37df0f7930_1gaef1a08fdcf6ec1835d042d37df0f7930"><code>lion_vector_from_array</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,const void * data,const size_t len,const size_t data_size,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * out)</code></td><td>Create vector from array.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_ga22072666cddd6b5f05fc7eecea97fc87_1ga22072666cddd6b5f05fc7eecea97fc87"><code>lion_vector_from_csv</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,const char * filename,const size_t data_size,const char * format,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * out)</code></td><td>Create vector from a CSV file.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_gad1064dc155ad8482da63c39b0a7630e2_1gad1064dc155ad8482da63c39b0a7630e2"><code>lion_vector_linspace_d</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,double low,double high,int num,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * out)</code></td><td>Create vector of evenly spaced doubles.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_ga636216017d4045f44a38281d7fe1e33e_1ga636216017d4045f44a38281d7fe1e33e"><code>lion_vector_linspace_f</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,float low,float high,int num,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * out)</code></td><td>Create vector of evenly spaced floats.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_ga44f47b929c18810d8c12ab95400a2d45_1ga44f47b929c18810d8c12ab95400a2d45"><code>lion_vector_to_csv</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const char * header,const char * filename)</code></td><td>Save a vector into a CSV file.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1gaf344e9af371b2c5ab10579eb3c2875bb"><code>lion_vector_cleanup</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> *const vec)</code></td><td>Destroy a vector.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_ga7200a73802f550fed75af8925818a93e_1ga7200a73802f550fed75af8925818a93e"><code>lion_vector_get</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i,void * out)</code></td><td>Get a given element from the vector.</td></tr>
+<tr><td><code>public int8_t </code><a href="reference/api_reference_functions.html#group__functions_1gadb98477d4a6a81cf5b18452172914096"><code>lion_vector_get_i8</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i)</code></td><td></td></tr>
+<tr><td><code>public int16_t </code><a href="reference/api_reference_functions.html#group__functions_1gaba475c5972329431aad8f9b86bfac05c"><code>lion_vector_get_i16</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i)</code></td><td></td></tr>
+<tr><td><code>public int32_t </code><a href="reference/api_reference_functions.html#group__functions_1ga627d98b0dd12af946100921a2c3c5b70"><code>lion_vector_get_i32</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i)</code></td><td></td></tr>
+<tr><td><code>public int64_t </code><a href="reference/api_reference_functions.html#group__functions_1gad8d58e54d07029ec1f3c4e6b0f09bebf"><code>lion_vector_get_i64</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i)</code></td><td></td></tr>
+<tr><td><code>public uint8_t </code><a href="reference/api_reference_functions.html#group__functions_1ga380ced6bc80df1f1de5953be5eeaeaeb"><code>lion_vector_get_u8</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i)</code></td><td></td></tr>
+<tr><td><code>public uint16_t </code><a href="reference/api_reference_functions.html#group__functions_1gab36c5e9663208969f8dea6a189bb44d3"><code>lion_vector_get_u16</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i)</code></td><td></td></tr>
+<tr><td><code>public uint32_t </code><a href="reference/api_reference_functions.html#group__functions_1ga4957dc450cd7dc07833abcb3387bd1b1"><code>lion_vector_get_u32</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i)</code></td><td></td></tr>
+<tr><td><code>public uint64_t </code><a href="reference/api_reference_functions.html#group__functions_1gab804b4f3f94e957a79c2bc837aeaa297"><code>lion_vector_get_u64</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i)</code></td><td></td></tr>
+<tr><td><code>public float </code><a href="reference/api_reference_functions.html#group__functions_1gaf84b4af22bbd61499e4d5db4c3bfc497"><code>lion_vector_get_f</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i)</code></td><td></td></tr>
+<tr><td><code>public double </code><a href="reference/api_reference_functions.html#group__functions_1ga0976147c328d976ceada338b92bd0f03"><code>lion_vector_get_d</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i)</code></td><td></td></tr>
+<tr><td><code>public void * </code><a href="reference/api_reference_functions.html#group__functions_1gaef9380622e07e5ce7460fbb80c74a3e4"><code>lion_vector_get_p</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i)</code></td><td></td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_ga80905d7bf8c9bd315b514ebaa9e1cb4b_1ga80905d7bf8c9bd315b514ebaa9e1cb4b"><code>lion_vector_set</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i,const void * src)</code></td><td>Set a given element from the vector. Copies the original element.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_gabcad67f3405da51159023114bb6c194d_1gabcad67f3405da51159023114bb6c194d"><code>lion_vector_resize</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t new_capacity)</code></td><td>Resizes the vector.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_ga04689338e3692ddac8fe5ecb76391f0a_1ga04689338e3692ddac8fe5ecb76391f0a"><code>lion_vector_push</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const void * src)</code></td><td>Pushes an element into the vector.</td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1gadeab35c2acb36c8cb730cb56cf4fc25e"><code>lion_vector_push_d</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,double src)</code></td><td></td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1ga2859ac9c5297e670e66cdbf35b126805"><code>lion_vector_push_f</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,float src)</code></td><td></td></tr>
+<tr><td><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_gad03907b735d1f2607d85cda4eaf4bc98_1gad03907b735d1f2607d85cda4eaf4bc98"><code>lion_vector_extend_array</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const void * src,const size_t len)</code></td><td>Extends the vector using an array.</td></tr>
+<tr><td><code>public size_t </code><a href="reference/api_reference_functions.html#group__functions_ga992c8763c9a861ef05ce759b92ccbf74_1ga992c8763c9a861ef05ce759b92ccbf74"><code>lion_vector_total_size</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec)</code></td><td>Total size of the vector.</td></tr>
+<tr><td><code>public size_t </code><a href="reference/api_reference_functions.html#group__functions_ga731ffd13355eb383ef171129c85c5671_1ga731ffd13355eb383ef171129c85c5671"><code>lion_vector_alloc_size</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec)</code></td><td>Allocated size of the vector.</td></tr>
+</tbody></table>
+</div>
+<h2 id="members-17"><a class="header" href="#members-17">Members</a></h2>
+<h4 id="group__functions_1gaf93e26d7c1fd310895346b5d445e5241"><a class="header" href="#group__functions_1gaf93e26d7c1fd310895346b5d445e5241"><code>public const char * </code><a href="reference/api_reference_functions.html#group__functions_1gaf93e26d7c1fd310895346b5d445e5241"><code>lion_regime_name</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa81dd4d1f7acebaddf727189d9cd5bbe_1gaa81dd4d1f7acebaddf727189d9cd5bbe"><code>lion_regime_t</code></a><code> regime)</code></a></h4>
+<p>Get the name of the regime.</p>
+<h4 id="group__functions_1ga617292d3a33b374cf2e2e271a574e403"><a class="header" href="#group__functions_1ga617292d3a33b374cf2e2e271a574e403"><code>public const char * </code><a href="reference/api_reference_functions.html#group__functions_1ga617292d3a33b374cf2e2e271a574e403"><code>lion_stepper_name</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_ga586717928f0804ceee5a550d7ac94118_1ga586717928f0804ceee5a550d7ac94118"><code>lion_stepper_t</code></a><code> stepper)</code></a></h4>
+<p>Get the name of the stepper.</p>
+<h4 id="group__functions_1ga0f27c3adc7a8e52407c0503330fd1cd4"><a class="header" href="#group__functions_1ga0f27c3adc7a8e52407c0503330fd1cd4"><code>public const char * </code><a href="reference/api_reference_functions.html#group__functions_1ga0f27c3adc7a8e52407c0503330fd1cd4"><code>lion_minimizer_name</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_ga3f770ea39e62d3fef7525ecfd193323e_1ga3f770ea39e62d3fef7525ecfd193323e"><code>lion_minimizer_t</code></a><code> minimizer)</code></a></h4>
+<p>Get the name of the minimizer.</p>
+<h4 id="group__functions_1gaee4b6b94c7518ca866bb9f2ecfd25959"><a class="header" href="#group__functions_1gaee4b6b94c7518ca866bb9f2ecfd25959"><code>public const char * </code><a href="reference/api_reference_functions.html#group__functions_1gaee4b6b94c7518ca866bb9f2ecfd25959"><code>lion_gsl_errno_name</code></a><code>(const int num)</code></a></h4>
+<p>Get the name of the GSL error number.</p>
+<h4 id="group__functions_1ga0ee73f1faf952a7b5e555afb2026f1c5"><a class="header" href="#group__functions_1ga0ee73f1faf952a7b5e555afb2026f1c5"><code>public const char * </code><a href="reference/api_reference_functions.html#group__functions_1ga0ee73f1faf952a7b5e555afb2026f1c5"><code>lion_jacobian_name</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gac3b206fab2eef1f627bbe62eaf236830_1gac3b206fab2eef1f627bbe62eaf236830"><code>lion_jacobian_method_t</code></a><code> jacobian)</code></a></h4>
+<p>Get the name of a jacobian calculation method.</p>
+<h4 id="group__functions_1gaf99e93490ff25522e9a21abf28748a17"><a class="header" href="#group__functions_1gaf99e93490ff25522e9a21abf28748a17"><code>public const char * </code><a href="reference/api_reference_functions.html#group__functions_1gaf99e93490ff25522e9a21abf28748a17"><code>lion_params_rint_get_name</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga2cc0c1a1359194037b73ab8c61d45c7a"><code>lion_rint_model_t</code></a><code> model)</code></a></h4>
+<p>Get the name of the internal resistance model.</p>
+<h4 id="group__functions_1ga9a9d244ce04425fb62d916adac779650"><a class="header" href="#group__functions_1ga9a9d244ce04425fb62d916adac779650"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ffe7fa0a2a711aa74a56f9c64e270fd"><code>lion_params_init_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1ga9a9d244ce04425fb62d916adac779650"><code>lion_params_default_init</code></a><code>(void)</code></a></h4>
+<p>Get default initial conditions parameters.</p>
+<h4 id="group__functions_1gac8ab90bb1f69a0017043d06c684121e0"><a class="header" href="#group__functions_1gac8ab90bb1f69a0017043d06c684121e0"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga110ae89ae6e1a9e88dcd823407e7a6f5"><code>lion_params_ehc_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1gac8ab90bb1f69a0017043d06c684121e0"><code>lion_params_default_ehc</code></a><code>(void)</code></a></h4>
+<p>Get default entropic heat coefficient parameters.</p>
+<h4 id="group__functions_1ga9b7e0fa4d6631ba9e49569672244bc18"><a class="header" href="#group__functions_1ga9b7e0fa4d6631ba9e49569672244bc18"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gab86981023ce45ccd47be86cb00453653"><code>lion_params_ocv_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1ga9b7e0fa4d6631ba9e49569672244bc18"><code>lion_params_default_ocv</code></a><code>(void)</code></a></h4>
+<p>Get default open-circuit voltage parameters.</p>
+<h4 id="group__functions_1ga67139df6eca3e62f7cacb51ce1f24a2f"><a class="header" href="#group__functions_1ga67139df6eca3e62f7cacb51ce1f24a2f"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga39a87bd0f30475e011a62b82939598f2"><code>lion_params_vft_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1ga67139df6eca3e62f7cacb51ce1f24a2f"><code>lion_params_default_vft</code></a><code>(void)</code></a></h4>
+<p>Get default capacity parameters.</p>
+<h4 id="group__functions_1gaa901a79a8543206b3473ffcad6f16be8"><a class="header" href="#group__functions_1gaa901a79a8543206b3473ffcad6f16be8"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gad653f645ddc01adb042cd3c722cac565"><code>lion_params_temp_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1gaa901a79a8543206b3473ffcad6f16be8"><code>lion_params_default_temp</code></a><code>(void)</code></a></h4>
+<p>Get default temperature parameters.</p>
+<h4 id="group__functions_1gaa26ce84ed464b5e9f4717a473345870e"><a class="header" href="#group__functions_1gaa26ce84ed464b5e9f4717a473345870e"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga851f6e7452ee21f794efda4cffbd8ebf"><code>lion_params_rint_fixed_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1gaa26ce84ed464b5e9f4717a473345870e"><code>lion_params_default_rint_fixed</code></a><code>(void)</code></a></h4>
+<p>Get default fixed internal resistance parameters.</p>
+<h4 id="group__functions_1ga165d77134ecb89a8f354ecee4380f8d8"><a class="header" href="#group__functions_1ga165d77134ecb89a8f354ecee4380f8d8"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gaba96491159ce5a51739d6f3aed3f0fc1"><code>lion_params_rint_polarization_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1ga165d77134ecb89a8f354ecee4380f8d8"><code>lion_params_default_rint_polarization</code></a><code>(void)</code></a></h4>
+<p>Get default polarization internal resistance parameters.</p>
+<h4 id="group__functions_1ga96ea57a4d8db3385aba9b041c133f37c"><a class="header" href="#group__functions_1ga96ea57a4d8db3385aba9b041c133f37c"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gaffd5b10ad8e28c00fadb12285a4c4fc2"><code>lion_params_rint_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1ga96ea57a4d8db3385aba9b041c133f37c"><code>lion_params_default_rint</code></a><code>(void)</code></a></h4>
+<p>Get default internal resistance parameters.</p>
+<h4 id="group__functions_1ga63e1aafe0805801ee8aff81ca67b0951"><a class="header" href="#group__functions_1ga63e1aafe0805801ee8aff81ca67b0951"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gaa11c455b198fc4e2421796fdec959f56"><code>lion_params_soh_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1ga63e1aafe0805801ee8aff81ca67b0951"><code>lion_params_default_soh</code></a><code>(void)</code></a></h4>
+<p>Get default degradation model parameters.</p>
+<h4 id="group__functions_1ga9293af4a9fd61e74aba596241686c427"><a class="header" href="#group__functions_1ga9293af4a9fd61e74aba596241686c427"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga456874d0aab89eef32d4212ff81005c6"><code>lion_params_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1ga9293af4a9fd61e74aba596241686c427"><code>lion_params_default</code></a><code>(void)</code></a></h4>
+<p>Get default system parameters.</p>
+<h4 id="group__functions_ga52dbb5712a734cd99193b50d3f8a9ce2_1ga52dbb5712a734cd99193b50d3f8a9ce2"><a class="header" href="#group__functions_ga52dbb5712a734cd99193b50d3f8a9ce2_1ga52dbb5712a734cd99193b50d3f8a9ce2"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_ga52dbb5712a734cd99193b50d3f8a9ce2_1ga52dbb5712a734cd99193b50d3f8a9ce2"><code>lion_sim_config_new</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_ga8a9770c4d58c262c80f8b91c87748056_1ga8a9770c4d58c262c80f8b91c87748056"><code>lion_sim_config_t</code></a><code> * out)</code></a></h4>
+<p>Create a new configuration.</p>
+<h4 id="parameters"><a class="header" href="#parameters">Parameters</a></h4>
+<ul>
+<li><code>out</code> Variable to store the new configuration.</li>
+</ul>
+<h4 id="group__functions_1gaf902ac0a9578af3bd17fc138ded06e97"><a class="header" href="#group__functions_1gaf902ac0a9578af3bd17fc138ded06e97"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_ga8a9770c4d58c262c80f8b91c87748056_1ga8a9770c4d58c262c80f8b91c87748056"><code>lion_sim_config_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1gaf902ac0a9578af3bd17fc138ded06e97"><code>lion_sim_config_default</code></a><code>(void)</code></a></h4>
+<p>Create a default configuration.</p>
+<h4 id="group__functions_gaf9d436cf7efe22528155c4994158083f_1gaf9d436cf7efe22528155c4994158083f"><a class="header" href="#group__functions_gaf9d436cf7efe22528155c4994158083f_1gaf9d436cf7efe22528155c4994158083f"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_gaf9d436cf7efe22528155c4994158083f_1gaf9d436cf7efe22528155c4994158083f"><code>lion_sim_new</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_ga8a9770c4d58c262c80f8b91c87748056_1ga8a9770c4d58c262c80f8b91c87748056"><code>lion_sim_config_t</code></a><code> * conf,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga456874d0aab89eef32d4212ff81005c6"><code>lion_params_t</code></a><code> * params,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * out)</code></a></h4>
+<p>Create a new simulation.</p>
+<p>Sets up the simulation with a set of configuration and parameters.</p>
+<h4 id="parameters-1"><a class="header" href="#parameters-1">Parameters</a></h4>
+<ul>
+<li>
+<p><code>conf</code> Pointer to the simulation configuration.</p>
+</li>
+<li>
+<p><code>params</code> Pointer to the simulation parameters.</p>
+</li>
+<li>
+<p><code>out</code> Pointer to where the sim will be created.</p>
+</li>
+</ul>
+<h4 id="group__functions_1gaf0ddcea19692192c7505f0608a9041d1"><a class="header" href="#group__functions_1gaf0ddcea19692192c7505f0608a9041d1"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1gaf0ddcea19692192c7505f0608a9041d1"><code>lion_sim_init</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim)</code></a></h4>
+<p>Initialize the simulation.</p>
+<h4 id="group__functions_1ga2412b8bc45b356b099ddc7853cfa3eea"><a class="header" href="#group__functions_1ga2412b8bc45b356b099ddc7853cfa3eea"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1ga2412b8bc45b356b099ddc7853cfa3eea"><code>lion_sim_reset</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim)</code></a></h4>
+<p>Reset the simulation.</p>
+<h4 id="group__functions_ga492cf08831b1cae560c9bf0aed87fd6c_1ga492cf08831b1cae560c9bf0aed87fd6c"><a class="header" href="#group__functions_ga492cf08831b1cae560c9bf0aed87fd6c_1ga492cf08831b1cae560c9bf0aed87fd6c"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_ga492cf08831b1cae560c9bf0aed87fd6c_1ga492cf08831b1cae560c9bf0aed87fd6c"><code>lion_sim_step</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,double power,double ambient_temperature)</code></a></h4>
+<p>Step the simulation in time.</p>
+<p>Steps the simulation forward considering some power and ambient temperature values.</p>
+<h4 id="parameters-2"><a class="header" href="#parameters-2">Parameters</a></h4>
+<ul>
+<li>
+<p><code>sim</code> Simulation to step forward.</p>
+</li>
+<li>
+<p><code>power</code> Power extracted from the cell.</p>
+</li>
+<li>
+<p><code>ambient_temperature</code> Ambient temperature around the cell.</p>
+</li>
+</ul>
+<h4 id="group__functions_gaf58bb933c9ee80445768eacf4417c4af_1gaf58bb933c9ee80445768eacf4417c4af"><a class="header" href="#group__functions_gaf58bb933c9ee80445768eacf4417c4af_1gaf58bb933c9ee80445768eacf4417c4af"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_gaf58bb933c9ee80445768eacf4417c4af_1gaf58bb933c9ee80445768eacf4417c4af"><code>lion_sim_run</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * power,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * ambient_temperature)</code></a></h4>
+<p>Runs the simulation.</p>
+<p>Runs the simulation considering a vector of values.</p>
+<h4 id="parameters-3"><a class="header" href="#parameters-3">Parameters</a></h4>
+<ul>
+<li>
+<p><code>sim</code> Simulation to run.</p>
+</li>
+<li>
+<p><code>power</code> Power extracted from the cell at each time step.</p>
+</li>
+<li>
+<p><code>ambient_temperature</code> Ambient temperature around the cell at each time step.</p>
+</li>
+</ul>
+<h4 id="group__functions_1ga6e5ce563179a42053e55e355bef35864"><a class="header" href="#group__functions_1ga6e5ce563179a42053e55e355bef35864"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gab0b8ddabaacc9299da81a42c188d2723"><code>lion_version_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1ga6e5ce563179a42053e55e355bef35864"><code>lion_sim_get_version</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim)</code></a></h4>
+<p>Get the version of the simulator.</p>
+<h4 id="group__functions_1gaa69ed18945a78b81f11a4041bb31d4bc"><a class="header" href="#group__functions_1gaa69ed18945a78b81f11a4041bb31d4bc"><code>public int </code><a href="reference/api_reference_functions.html#group__functions_1gaa69ed18945a78b81f11a4041bb31d4bc"><code>lion_sim_should_close</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim)</code></a></h4>
+<p>Check whether the simulation should close.</p>
+<h4 id="group__functions_1ga266d416a2bb3394bf5a9228cda300585"><a class="header" href="#group__functions_1ga266d416a2bb3394bf5a9228cda300585"><code>public uint64_t </code><a href="reference/api_reference_functions.html#group__functions_1ga266d416a2bb3394bf5a9228cda300585"><code>lion_sim_max_iters</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim)</code></a></h4>
+<p>Get the max number of iterations.</p>
+<h4 id="group__functions_1ga9f6e757ff258cdf5d5df0eba7103e08c"><a class="header" href="#group__functions_1ga9f6e757ff258cdf5d5df0eba7103e08c"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1ga9f6e757ff258cdf5d5df0eba7103e08c"><code>lion_sim_cleanup</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim)</code></a></h4>
+<p>Clean up the simulation.</p>
+<h4 id="group__functions_ga2439c677dd3f5d951182583c619215bb_1ga2439c677dd3f5d951182583c619215bb"><a class="header" href="#group__functions_ga2439c677dd3f5d951182583c619215bb_1ga2439c677dd3f5d951182583c619215bb"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_ga2439c677dd3f5d951182583c619215bb_1ga2439c677dd3f5d951182583c619215bb"><code>lion_vector_new</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,const size_t data_size,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * out)</code></a></h4>
+<p>Create new empty vector.</p>
+<h4 id="parameters-4"><a class="header" href="#parameters-4">Parameters</a></h4>
+<ul>
+<li>
+<p><code>sim</code> Simulation context, can be NULL.</p>
+</li>
+<li>
+<p><code>data_size</code> Size of each element.</p>
+</li>
+<li>
+<p><code>out</code> New vector.</p>
+</li>
+</ul>
+<h4 id="group__functions_gaec82027a4b6f0b0517b86319560e0dc9_1gaec82027a4b6f0b0517b86319560e0dc9"><a class="header" href="#group__functions_gaec82027a4b6f0b0517b86319560e0dc9_1gaec82027a4b6f0b0517b86319560e0dc9"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_gaec82027a4b6f0b0517b86319560e0dc9_1gaec82027a4b6f0b0517b86319560e0dc9"><code>lion_vector_zero</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,const size_t len,const size_t data_size,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * out)</code></a></h4>
+<p>Create new vector filled with zeros.</p>
+<h4 id="parameters-5"><a class="header" href="#parameters-5">Parameters</a></h4>
+<ul>
+<li>
+<p><code>sim</code> Simulation context, can be NULL.</p>
+</li>
+<li>
+<p><code>len</code> Number of elements.</p>
+</li>
+<li>
+<p><code>data_size</code> Size of each element.</p>
+</li>
+<li>
+<p><code>out</code> New vector.</p>
+</li>
+</ul>
+<h4 id="group__functions_ga7220a18b454c140cbfe49a4fe4d25d17_1ga7220a18b454c140cbfe49a4fe4d25d17"><a class="header" href="#group__functions_ga7220a18b454c140cbfe49a4fe4d25d17_1ga7220a18b454c140cbfe49a4fe4d25d17"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_ga7220a18b454c140cbfe49a4fe4d25d17_1ga7220a18b454c140cbfe49a4fe4d25d17"><code>lion_vector_with_capacity</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,const size_t capacity,const size_t data_size,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * out)</code></a></h4>
+<p>Create empty vector with preallocated size.</p>
+<h4 id="parameters-6"><a class="header" href="#parameters-6">Parameters</a></h4>
+<ul>
+<li>
+<p><code>sim</code> Simulation context, can be NULL.</p>
+</li>
+<li>
+<p><code>capacity</code> Preallocated size.</p>
+</li>
+<li>
+<p><code>data_size</code> Size of each element.</p>
+</li>
+<li>
+<p><code>out</code> New vector.</p>
+</li>
+</ul>
+<h4 id="group__functions_gaef1a08fdcf6ec1835d042d37df0f7930_1gaef1a08fdcf6ec1835d042d37df0f7930"><a class="header" href="#group__functions_gaef1a08fdcf6ec1835d042d37df0f7930_1gaef1a08fdcf6ec1835d042d37df0f7930"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_gaef1a08fdcf6ec1835d042d37df0f7930_1gaef1a08fdcf6ec1835d042d37df0f7930"><code>lion_vector_from_array</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,const void * data,const size_t len,const size_t data_size,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * out)</code></a></h4>
+<p>Create vector from array.</p>
+<h4 id="parameters-7"><a class="header" href="#parameters-7">Parameters</a></h4>
+<ul>
+<li>
+<p><code>sim</code> Simulation context, can be NULL.</p>
+</li>
+<li>
+<p><code>data</code> Elements of the array.</p>
+</li>
+<li>
+<p><code>len</code> Number of elements.</p>
+</li>
+<li>
+<p><code>data_size</code> Size of each element.</p>
+</li>
+<li>
+<p><code>out</code> New vector.</p>
+</li>
+</ul>
+<h4 id="group__functions_ga22072666cddd6b5f05fc7eecea97fc87_1ga22072666cddd6b5f05fc7eecea97fc87"><a class="header" href="#group__functions_ga22072666cddd6b5f05fc7eecea97fc87_1ga22072666cddd6b5f05fc7eecea97fc87"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_ga22072666cddd6b5f05fc7eecea97fc87_1ga22072666cddd6b5f05fc7eecea97fc87"><code>lion_vector_from_csv</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,const char * filename,const size_t data_size,const char * format,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * out)</code></a></h4>
+<p>Create vector from a CSV file.</p>
+<h4 id="parameters-8"><a class="header" href="#parameters-8">Parameters</a></h4>
+<ul>
+<li>
+<p><code>sim</code> Simulation context, can be NULL.</p>
+</li>
+<li>
+<p><code>filename</code> Name of the file.</p>
+</li>
+<li>
+<p><code>data_size</code> Size of each element.</p>
+</li>
+<li>
+<p><code>format</code> Format of each line.</p>
+</li>
+<li>
+<p><code>out</code> New vector.</p>
+</li>
+</ul>
+<h4 id="group__functions_gad1064dc155ad8482da63c39b0a7630e2_1gad1064dc155ad8482da63c39b0a7630e2"><a class="header" href="#group__functions_gad1064dc155ad8482da63c39b0a7630e2_1gad1064dc155ad8482da63c39b0a7630e2"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_gad1064dc155ad8482da63c39b0a7630e2_1gad1064dc155ad8482da63c39b0a7630e2"><code>lion_vector_linspace_d</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,double low,double high,int num,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * out)</code></a></h4>
+<p>Create vector of evenly spaced doubles.</p>
+<h4 id="parameters-9"><a class="header" href="#parameters-9">Parameters</a></h4>
+<ul>
+<li>
+<p><code>sim</code> Simulation context, can be NULL.</p>
+</li>
+<li>
+<p><code>low</code> Lower limit.</p>
+</li>
+<li>
+<p><code>high</code> Upper limit.</p>
+</li>
+<li>
+<p><code>num</code> Number of elements.</p>
+</li>
+<li>
+<p><code>out</code> New vector.</p>
+</li>
+</ul>
+<h4 id="group__functions_ga636216017d4045f44a38281d7fe1e33e_1ga636216017d4045f44a38281d7fe1e33e"><a class="header" href="#group__functions_ga636216017d4045f44a38281d7fe1e33e_1ga636216017d4045f44a38281d7fe1e33e"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_ga636216017d4045f44a38281d7fe1e33e_1ga636216017d4045f44a38281d7fe1e33e"><code>lion_vector_linspace_f</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,float low,float high,int num,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * out)</code></a></h4>
+<p>Create vector of evenly spaced floats.</p>
+<h4 id="parameters-10"><a class="header" href="#parameters-10">Parameters</a></h4>
+<ul>
+<li>
+<p><code>sim</code> Simulation context, can be NULL.</p>
+</li>
+<li>
+<p><code>low</code> Lower limit.</p>
+</li>
+<li>
+<p><code>high</code> Upper limit.</p>
+</li>
+<li>
+<p><code>num</code> Number of elements.</p>
+</li>
+<li>
+<p><code>out</code> New vector.</p>
+</li>
+</ul>
+<h4 id="group__functions_ga44f47b929c18810d8c12ab95400a2d45_1ga44f47b929c18810d8c12ab95400a2d45"><a class="header" href="#group__functions_ga44f47b929c18810d8c12ab95400a2d45_1ga44f47b929c18810d8c12ab95400a2d45"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_ga44f47b929c18810d8c12ab95400a2d45_1ga44f47b929c18810d8c12ab95400a2d45"><code>lion_vector_to_csv</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const char * header,const char * filename)</code></a></h4>
+<p>Save a vector into a CSV file.</p>
+<h4 id="parameters-11"><a class="header" href="#parameters-11">Parameters</a></h4>
+<ul>
+<li>
+<p><code>sim</code> Simulation context, can be NULL.</p>
+</li>
+<li>
+<p><code>vec</code> Vector to save.</p>
+</li>
+<li>
+<p><code>header</code> Header to use for the CSV file. For no header pass NULL.</p>
+</li>
+<li>
+<p><code>filename</code> Name of the file.</p>
+</li>
+</ul>
+<h4 id="group__functions_1gaf344e9af371b2c5ab10579eb3c2875bb"><a class="header" href="#group__functions_1gaf344e9af371b2c5ab10579eb3c2875bb"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1gaf344e9af371b2c5ab10579eb3c2875bb"><code>lion_vector_cleanup</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> *const vec)</code></a></h4>
+<p>Destroy a vector.</p>
+<h4 id="group__functions_ga7200a73802f550fed75af8925818a93e_1ga7200a73802f550fed75af8925818a93e"><a class="header" href="#group__functions_ga7200a73802f550fed75af8925818a93e_1ga7200a73802f550fed75af8925818a93e"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_ga7200a73802f550fed75af8925818a93e_1ga7200a73802f550fed75af8925818a93e"><code>lion_vector_get</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i,void * out)</code></a></h4>
+<p>Get a given element from the vector.</p>
+<h4 id="parameters-12"><a class="header" href="#parameters-12">Parameters</a></h4>
+<ul>
+<li>
+<p><code>sim</code> Simulation context, can be NULL.</p>
+</li>
+<li>
+<p><code>vec</code> Vector.</p>
+</li>
+<li>
+<p><code>i</code> Index of the element.</p>
+</li>
+<li>
+<p><code>out</code> Pointer to the location on which to store the output.</p>
+</li>
+</ul>
+<h4 id="group__functions_1gadb98477d4a6a81cf5b18452172914096"><a class="header" href="#group__functions_1gadb98477d4a6a81cf5b18452172914096"><code>public int8_t </code><a href="reference/api_reference_functions.html#group__functions_1gadb98477d4a6a81cf5b18452172914096"><code>lion_vector_get_i8</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i)</code></a></h4>
+<h4 id="group__functions_1gaba475c5972329431aad8f9b86bfac05c"><a class="header" href="#group__functions_1gaba475c5972329431aad8f9b86bfac05c"><code>public int16_t </code><a href="reference/api_reference_functions.html#group__functions_1gaba475c5972329431aad8f9b86bfac05c"><code>lion_vector_get_i16</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i)</code></a></h4>
+<h4 id="group__functions_1ga627d98b0dd12af946100921a2c3c5b70"><a class="header" href="#group__functions_1ga627d98b0dd12af946100921a2c3c5b70"><code>public int32_t </code><a href="reference/api_reference_functions.html#group__functions_1ga627d98b0dd12af946100921a2c3c5b70"><code>lion_vector_get_i32</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i)</code></a></h4>
+<h4 id="group__functions_1gad8d58e54d07029ec1f3c4e6b0f09bebf"><a class="header" href="#group__functions_1gad8d58e54d07029ec1f3c4e6b0f09bebf"><code>public int64_t </code><a href="reference/api_reference_functions.html#group__functions_1gad8d58e54d07029ec1f3c4e6b0f09bebf"><code>lion_vector_get_i64</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i)</code></a></h4>
+<h4 id="group__functions_1ga380ced6bc80df1f1de5953be5eeaeaeb"><a class="header" href="#group__functions_1ga380ced6bc80df1f1de5953be5eeaeaeb"><code>public uint8_t </code><a href="reference/api_reference_functions.html#group__functions_1ga380ced6bc80df1f1de5953be5eeaeaeb"><code>lion_vector_get_u8</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i)</code></a></h4>
+<h4 id="group__functions_1gab36c5e9663208969f8dea6a189bb44d3"><a class="header" href="#group__functions_1gab36c5e9663208969f8dea6a189bb44d3"><code>public uint16_t </code><a href="reference/api_reference_functions.html#group__functions_1gab36c5e9663208969f8dea6a189bb44d3"><code>lion_vector_get_u16</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i)</code></a></h4>
+<h4 id="group__functions_1ga4957dc450cd7dc07833abcb3387bd1b1"><a class="header" href="#group__functions_1ga4957dc450cd7dc07833abcb3387bd1b1"><code>public uint32_t </code><a href="reference/api_reference_functions.html#group__functions_1ga4957dc450cd7dc07833abcb3387bd1b1"><code>lion_vector_get_u32</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i)</code></a></h4>
+<h4 id="group__functions_1gab804b4f3f94e957a79c2bc837aeaa297"><a class="header" href="#group__functions_1gab804b4f3f94e957a79c2bc837aeaa297"><code>public uint64_t </code><a href="reference/api_reference_functions.html#group__functions_1gab804b4f3f94e957a79c2bc837aeaa297"><code>lion_vector_get_u64</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i)</code></a></h4>
+<h4 id="group__functions_1gaf84b4af22bbd61499e4d5db4c3bfc497"><a class="header" href="#group__functions_1gaf84b4af22bbd61499e4d5db4c3bfc497"><code>public float </code><a href="reference/api_reference_functions.html#group__functions_1gaf84b4af22bbd61499e4d5db4c3bfc497"><code>lion_vector_get_f</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i)</code></a></h4>
+<h4 id="group__functions_1ga0976147c328d976ceada338b92bd0f03"><a class="header" href="#group__functions_1ga0976147c328d976ceada338b92bd0f03"><code>public double </code><a href="reference/api_reference_functions.html#group__functions_1ga0976147c328d976ceada338b92bd0f03"><code>lion_vector_get_d</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i)</code></a></h4>
+<h4 id="group__functions_1gaef9380622e07e5ce7460fbb80c74a3e4"><a class="header" href="#group__functions_1gaef9380622e07e5ce7460fbb80c74a3e4"><code>public void * </code><a href="reference/api_reference_functions.html#group__functions_1gaef9380622e07e5ce7460fbb80c74a3e4"><code>lion_vector_get_p</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i)</code></a></h4>
+<h4 id="group__functions_ga80905d7bf8c9bd315b514ebaa9e1cb4b_1ga80905d7bf8c9bd315b514ebaa9e1cb4b"><a class="header" href="#group__functions_ga80905d7bf8c9bd315b514ebaa9e1cb4b_1ga80905d7bf8c9bd315b514ebaa9e1cb4b"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_ga80905d7bf8c9bd315b514ebaa9e1cb4b_1ga80905d7bf8c9bd315b514ebaa9e1cb4b"><code>lion_vector_set</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t i,const void * src)</code></a></h4>
+<p>Set a given element from the vector. Copies the original element.</p>
+<h4 id="parameters-13"><a class="header" href="#parameters-13">Parameters</a></h4>
+<ul>
+<li>
+<p><code>sim</code> Simulation context, can be NULL.</p>
+</li>
+<li>
+<p><code>vec</code> Vector.</p>
+</li>
+<li>
+<p><code>i</code> Index of the element.</p>
+</li>
+<li>
+<p><code>out</code> Pointer to the location to copy into the vector.</p>
+</li>
+</ul>
+<h4 id="group__functions_gabcad67f3405da51159023114bb6c194d_1gabcad67f3405da51159023114bb6c194d"><a class="header" href="#group__functions_gabcad67f3405da51159023114bb6c194d_1gabcad67f3405da51159023114bb6c194d"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_gabcad67f3405da51159023114bb6c194d_1gabcad67f3405da51159023114bb6c194d"><code>lion_vector_resize</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const size_t new_capacity)</code></a></h4>
+<p>Resizes the vector.</p>
+<h4 id="parameters-14"><a class="header" href="#parameters-14">Parameters</a></h4>
+<ul>
+<li>
+<p><code>sim</code> Simulation context, can be NULL.</p>
+</li>
+<li>
+<p><code>vec</code> Vector to resize.</p>
+</li>
+<li>
+<p><code>new_capacity</code> New capacity for the vector.</p>
+</li>
+</ul>
+<h4 id="group__functions_ga04689338e3692ddac8fe5ecb76391f0a_1ga04689338e3692ddac8fe5ecb76391f0a"><a class="header" href="#group__functions_ga04689338e3692ddac8fe5ecb76391f0a_1ga04689338e3692ddac8fe5ecb76391f0a"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_ga04689338e3692ddac8fe5ecb76391f0a_1ga04689338e3692ddac8fe5ecb76391f0a"><code>lion_vector_push</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const void * src)</code></a></h4>
+<p>Pushes an element into the vector.</p>
+<h4 id="parameters-15"><a class="header" href="#parameters-15">Parameters</a></h4>
+<ul>
+<li>
+<p><code>sim</code> Simulation context, can be NULL.</p>
+</li>
+<li>
+<p><code>vec</code> Vector to push into.</p>
+</li>
+<li>
+<p><code>src</code> Element to push. Clones this element.</p>
+</li>
+</ul>
+<h4 id="group__functions_1gadeab35c2acb36c8cb730cb56cf4fc25e"><a class="header" href="#group__functions_1gadeab35c2acb36c8cb730cb56cf4fc25e"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1gadeab35c2acb36c8cb730cb56cf4fc25e"><code>lion_vector_push_d</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,double src)</code></a></h4>
+<h4 id="group__functions_1ga2859ac9c5297e670e66cdbf35b126805"><a class="header" href="#group__functions_1ga2859ac9c5297e670e66cdbf35b126805"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_1ga2859ac9c5297e670e66cdbf35b126805"><code>lion_vector_push_f</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,float src)</code></a></h4>
+<h4 id="group__functions_gad03907b735d1f2607d85cda4eaf4bc98_1gad03907b735d1f2607d85cda4eaf4bc98"><a class="header" href="#group__functions_gad03907b735d1f2607d85cda4eaf4bc98_1gad03907b735d1f2607d85cda4eaf4bc98"><code>public </code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1ga1ae940ed217a44bb844ed6e0417c082c"><code>lion_status_t</code></a><code> </code><a href="reference/api_reference_functions.html#group__functions_gad03907b735d1f2607d85cda4eaf4bc98_1gad03907b735d1f2607d85cda4eaf4bc98"><code>lion_vector_extend_array</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code> * sim,</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec,const void * src,const size_t len)</code></a></h4>
+<p>Extends the vector using an array.</p>
+<h4 id="parameters-16"><a class="header" href="#parameters-16">Parameters</a></h4>
+<ul>
+<li>
+<p><code>sim</code> Simulation context, can be NULL.</p>
+</li>
+<li>
+<p><code>vec</code> Vector to resize.</p>
+</li>
+<li>
+<p><code>src</code> Elements to push. Get cloned.</p>
+</li>
+<li>
+<p><code>len</code> Number of elements to push.</p>
+</li>
+</ul>
+<h4 id="group__functions_ga992c8763c9a861ef05ce759b92ccbf74_1ga992c8763c9a861ef05ce759b92ccbf74"><a class="header" href="#group__functions_ga992c8763c9a861ef05ce759b92ccbf74_1ga992c8763c9a861ef05ce759b92ccbf74"><code>public size_t </code><a href="reference/api_reference_functions.html#group__functions_ga992c8763c9a861ef05ce759b92ccbf74_1ga992c8763c9a861ef05ce759b92ccbf74"><code>lion_vector_total_size</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec)</code></a></h4>
+<p>Total size of the vector.</p>
+<h4 id="parameters-17"><a class="header" href="#parameters-17">Parameters</a></h4>
+<ul>
+<li>
+<p><code>sim</code> Simulation context, can be NULL.</p>
+</li>
+<li>
+<p><code>vec</code> Vector to fetch.</p>
+</li>
+</ul>
+<h4 id="group__functions_ga731ffd13355eb383ef171129c85c5671_1ga731ffd13355eb383ef171129c85c5671"><a class="header" href="#group__functions_ga731ffd13355eb383ef171129c85c5671_1ga731ffd13355eb383ef171129c85c5671"><code>public size_t </code><a href="reference/api_reference_functions.html#group__functions_ga731ffd13355eb383ef171129c85c5671_1ga731ffd13355eb383ef171129c85c5671"><code>lion_vector_alloc_size</code></a><code>(</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_gaa16b131211de44ce11e5b5964ca44fac_1gaa16b131211de44ce11e5b5964ca44fac"><code>lion_sim_t</code></a><code>* sim,const</code><a href="reference/docs/src/reference/api_reference_undefined.html#group__types_1gabb79a4e113333645c62b6b106d304505"><code>lion_vector_t</code></a><code> * vec)</code></a></h4>
+<p>Allocated size of the vector.</p>
+<h4 id="parameters-18"><a class="header" href="#parameters-18">Parameters</a></h4>
+<ul>
+<li>
+<p><code>sim</code> Simulation context, can be NULL.</p>
+</li>
+<li>
+<p><code>vec</code> Vector to fetch.</p>
+</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            MathJax.Hub.Register.StartupHook('End', function() {
+                window.setTimeout(window.print, 100);
+            });
+        });
+        </script>
+
+    </div>
+    </body>
+</html>

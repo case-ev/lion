@@ -1,0 +1,68 @@
+DisableFormat: false
+BasedOnStyle: LLVM
+
+### Code size ###
+UseTab: Never
+IndentWidth: 2
+TabWidth: 2
+ColumnLimit: 150
+BreakBeforeBraces: Attach
+
+### Placement ###
+DerivePointerAlignment: false
+PointerAlignment: Right
+AllowShortBlocksOnASingleLine: Empty
+AllowShortCaseLabelsOnASingleLine: false
+# BreakAfterReturnType: Automatic
+BracedInitializerIndentWidth: 2
+PenaltyReturnTypeOnItsOwnLine: 1000
+BreakBeforeConceptDeclarations: Always
+BreakConstructorInitializers: AfterColon
+BreakInheritanceList: AfterColon
+BreakStringLiterals: true
+# BreakTemplateDeclarations: Yes
+CompactNamespaces: false
+# Cpp11BracedListStyle: false
+IncludeBlocks: Regroup
+IndentCaseLabels: false
+IndentExternBlock: NoIndent
+IndentPPDirectives: BeforeHash
+NamespaceIndentation: None
+SpaceBeforeCaseColon: false
+
+### Alignments ###
+AlignAfterOpenBracket: BlockIndent
+AlignArrayOfStructures: Right
+AlignConsecutiveAssignments:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: true
+  AlignCompound: true
+AlignConsecutiveDeclarations:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: true
+  AlignCompound: true
+AlignConsecutiveMacros:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: true
+  AlignCompound: true
+AlignConsecutiveShortCaseStatements:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: true
+AlignOperands: Align
+AlignTrailingComments:
+  Kind: Always
+  OverEmptyLines: 1
+AlignEscapedNewlines: Right
+
+### Insertions ###
+InsertNewlineAtEOF: true
+BinPackArguments: false
+BinPackParameters: false
+InsertTrailingCommas: Wrapped
+EmptyLineAfterAccessModifier: Never
+EmptyLineBeforeAccessModifier: Always
+FixNamespaceComments: true

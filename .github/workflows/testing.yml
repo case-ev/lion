@@ -1,0 +1,166 @@
+name: Tests
+env:
+  VCPKG_ROOT: '${{ github.workspace }}/vcpkg'
+on:
+  push:
+    branches-ignore:
+      - "gh-pages"
+
+jobs:
+  ctest:
+    name: Testing CTest ${{ matrix.config.os }} ${{ matrix.build-type }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      matrix:
+        build-type: ["Debug", "Release"]
+        config:
+          - {
+              os: windows-latest,
+              deps-script: ""
+            }
+          - {
+              os: ubuntu-latest,
+              deps-script: "sudo apt-get install libgsl-dev"
+            }
+          - {
+              os: macos-latest,
+              deps-script: "brew install gsl"
+            }
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.0
+        with:
+          submodules: true
+
+      - name: Install dependencies
+        run: |
+          ${{ matrix.config.deps-script }}
+
+      - name: Set up Ninja
+        uses: seanmiddleditch/gha-setup-ninja@v5
+
+      - name: vcpkg build
+        if: runner.os == 'Windows'
+        id: vcpkg
+        uses: johnwason/vcpkg-action@v6
+        with:
+          manifest-dir: ${{ github.workspace }}
+          triplet: x64-windows-release
+          token: ${{ github.token }}
+          github-binarycache: true
+
+      - name: Configure and build (windows)
+        if: runner.os == 'Windows'
+        uses: threeal/cmake-action@v2.0.0
+        with:
+          run-build: true
+          options: |
+            BUILD_SHARED_LIBS=ON
+            LION_BUILD_TESTS=ON
+            LION_BUILD_EXAMPLES=OFF
+            CMAKE_BUILD_TYPE=${{ matrix.build-type }}
+            CMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
+          build-args: |
+            --config ${{ matrix.build-type }}
+
+      - name: Configure and build
+        if: runner.os != 'Windows'
+        uses: threeal/cmake-action@v2.0.0
+        with:
+          run-build: true
+          options: |
+            BUILD_SHARED_LIBS=ON
+            LION_BUILD_TESTS=ON
+            LION_BUILD_EXAMPLES=OFF
+            CMAKE_BUILD_TYPE=${{ matrix.build-type }}
+          build-args: |
+            --config ${{ matrix.build-type }}
+
+      # - name: Move dependencies (windows)
+      #   if: runner.os == 'Windows' && matrix.build-type == 'Release'
+      #   run: |
+      #     mv ${{ github.workspace }}/vcpkg/installed/x64-windows-release/bin/*.dll ${{ github.workspace }}/bin/
+      #     mv ${{ github.workspace }}/vcpkg/installed/x64-windows-release/lib/*.lib ${{ github.workspace }}/lib/
+
+      - name: Move dependencies (windows)
+        if: runner.os == 'Windows' && matrix.build-type == 'Debug'
+        run: |
+          mv ${{ github.workspace }}/vcpkg/installed/x64-windows-release/bin/*.dll ${{ github.workspace }}/bin/debug/
+          mv ${{ github.workspace }}/vcpkg/installed/x64-windows-release/lib/*.lib ${{ github.workspace }}/lib/debug/
+
+      - name: Run CTest
+        uses: threeal/ctest-action@v1.1.0
+        with:
+          build-config: ${{ matrix.build-type }}
+          verbose: true
+
+      - name: Setup tmate session
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 5
+
+  pytest:
+    name: Testing PyTest ${{ matrix.config.os }} py${{ matrix.python-version }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+        config:
+          - {
+              os: windows-latest,
+              deps-script: ""
+            }
+          - {
+              os: ubuntu-latest,
+              deps-script: "sudo apt-get install libgsl-dev"
+            }
+          - {
+              os: macos-latest,
+              deps-script: "brew install gsl"
+            }
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.0
+        with:
+          submodules: true
+
+      - name: Install dependencies
+        run: |
+          ${{ matrix.config.deps-script }}
+
+      - name: vcpkg build
+        if: runner.os == 'Windows'
+        id: vcpkg
+        uses: johnwason/vcpkg-action@v6
+        with:
+          manifest-dir: ${{ github.workspace }}
+          triplet: x64-windows-release
+          token: ${{ github.token }}
+          github-binarycache: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5.2.0
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Set up env
+        run: |
+          echo `python --version`
+          pip install pytest pytest-md cmake
+
+      - name: Build Python wrapper
+        run: |
+          pip install .
+
+      - name: Run pytest
+        uses: pavelzw/pytest-action@v2.2.0
+        with:
+          verbose: true
+          emoji: false
+          job-summary: true
+
+      - name: Setup tmate session
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 5
+
